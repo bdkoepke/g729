@@ -24,3 +24,5 @@ config.sub
 libtool
 ltmain.sh
 m4/
+*.o
+*.lo

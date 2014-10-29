@@ -645,7 +645,7 @@ int16_t extract_l(int32_t L_var1)
  |   Round the lower 16 bits of the 32 bit input number into its MS 16 bits  |
  |   with saturation. Shift the resulting bits right by 16 and return the 16 |
  |   bit number:                                                             |
- |               round(L_var1) = extract_h(L_add(L_var1,32768))              |
+ |               _round(L_var1) = extract_h(L_add(L_var1,32768))              |
  |                                                                           |
  |   Complexity weight : 1                                                   |
  |                                                                           |
@@ -667,7 +667,7 @@ int16_t extract_l(int32_t L_var1)
  |___________________________________________________________________________|
 */
 
-G729_INLINE int16_t round(int32_t L_var1)
+G729_INLINE int16_t _round(int32_t L_var1)
   {
 #if G729_ARM
 	  register int32_t L_var_out;
@@ -1545,7 +1545,7 @@ int16_t shr_r(int16_t var1, int16_t var2)
  |   result to L_var3 with saturation. Round the LS 16 bits of the result    |
  |   into the MS 16 bits with saturation and shift the result right by 16.   |
  |   Return a 16 bit result.                                                 |
- |            mac_r(L_var3,var1,var2) = round(L_mac(Lvar3,var1,var2))        |
+ |            mac_r(L_var3,var1,var2) = _round(L_mac(Lvar3,var1,var2))        |
  |                                                                           |
  |   Complexity weight : 2                                                   |
  |                                                                           |
@@ -1595,7 +1595,7 @@ int16_t mac_r(int32_t L_var3, int16_t var1, int16_t var2)
  |   bit result to L_var3 with saturation. Round the LS 16 bits of the res-  |
  |   ult into the MS 16 bits with saturation and shift the result right by   |
  |   16. Return a 16 bit result.                                             |
- |            msu_r(L_var3,var1,var2) = round(L_msu(Lvar3,var1,var2))        |
+ |            msu_r(L_var3,var1,var2) = _round(L_msu(Lvar3,var1,var2))        |
  |                                                                           |
  |   Complexity weight : 2                                                   |
  |                                                                           |

@@ -79,7 +79,7 @@ void Pre_Process(
      L_tmp     = L_mac(L_tmp, x1, b140[1]);
      L_tmp     = L_mac(L_tmp, x2, b140[2]);
      L_tmp     = L_shl(L_tmp, 3);      /* Q28 --> Q31 (Q12 --> Q15) */
-     signal[i] = round(L_tmp);
+     signal[i] = _round(L_tmp);
 
      y2_hi = y1_hi;
      y2_lo = y1_lo;

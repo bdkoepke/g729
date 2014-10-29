@@ -57,7 +57,7 @@ void Pred_lt_3(
       s = L_mac(s, x2[i],  c2[k]);
     }
 
-    exc[j] = round(s);
+    exc[j] = _round(s);
   }
 
   return;

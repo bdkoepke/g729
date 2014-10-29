@@ -161,7 +161,7 @@ void Lsp_lsf(
     /* acos(lsp[i])= ind*256 + ( ( lsp[i]-table[ind] ) * slope[ind] )/4096 */
 
     L_tmp  = L_mult( sub(lsp[i], table[ind]) , slope[ind] );
-    tmp = round(L_shl(L_tmp, 3));     /*(lsp[i]-table[ind])*slope[ind])>>12*/
+    tmp = _round(L_shl(L_tmp, 3));     /*(lsp[i]-table[ind])*slope[ind])>>12*/
     lsf[i] = add(tmp, shl(ind, 8));
   }
   return;
@@ -271,10 +271,10 @@ void Weight_Az(
   fac   = gamma;
   for(i=1; i<m; i++)
   {
-    ap[i] = round( L_mult(a[i], fac) );
-    fac   = round( L_mult(fac, gamma) );
+    ap[i] = _round( L_mult(a[i], fac) );
+    fac   = _round( L_mult(fac, gamma) );
   }
-  ap[m] = round( L_mult(a[m], fac) );
+  ap[m] = _round( L_mult(a[m], fac) );
 
   return;
 }

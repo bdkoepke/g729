@@ -180,12 +180,11 @@ void vad(
     
   }
 
-  if (sub(frm_count, INIT_FRAME) <= 0)
+  if (sub(frm_count, INIT_FRAME) <= 0){
     if(sub(ENERGY, 3072) < 0){
       *marker = NOISE;
       less_count++;
-    }
-    else{
+    } else{
       *marker = VOICE;
       acc0 = L_deposit_h(MeanE);
       acc0 = L_mac(acc0, ENERGY, 1024);
@@ -199,6 +198,7 @@ void vad(
         MeanLSF[i] = extract_h(acc0);
       }
     }
+  }
   
   if (sub(frm_count, INIT_FRAME) >= 0){
     if (sub(frm_count, INIT_FRAME) == 0){

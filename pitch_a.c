@@ -402,14 +402,14 @@ int16_t G_pitch(      /* (o) Q14 : Gain of pitch lag saturated to 1.2       */
 
    if (Overflow == 0) {
      exp_yy = norm_l(s);
-     yy     = round( L_shl(s, exp_yy) );
+     yy     = _round( L_shl(s, exp_yy) );
    }
    else {
      s = 1;                  /* Avoid case of all zeros */
      for(i=0; i<L_subfr; i++)
        s = L_mac(s, scaled_y1[i], scaled_y1[i]);
      exp_yy = norm_l(s);
-     yy     = round( L_shl(s, exp_yy) );
+     yy     = _round( L_shl(s, exp_yy) );
      exp_yy = sub(exp_yy, 4);
    }
 
@@ -422,14 +422,14 @@ int16_t G_pitch(      /* (o) Q14 : Gain of pitch lag saturated to 1.2       */
 
    if (Overflow == 0) {
      exp_xy = norm_l(s);
-     xy     = round( L_shl(s, exp_xy) );
+     xy     = _round( L_shl(s, exp_xy) );
    }
    else {
      s = 0;
      for(i=0; i<L_subfr; i++)
        s = L_mac(s, xn[i], scaled_y1[i]);
      exp_xy = norm_l(s);
-     xy     = round( L_shl(s, exp_xy) );
+     xy     = _round( L_shl(s, exp_xy) );
      exp_xy = sub(exp_xy, 2);
    }
 

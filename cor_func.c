@@ -49,7 +49,7 @@ void Corr_xy2(
          L_acc = L_mac(L_acc, scaled_y2[i], scaled_y2[i]);    /* L_acc:Q19 */
 
       exp      = norm_l(L_acc);
-      y2y2     = round( L_shl(L_acc, exp) );
+      y2y2     = _round( L_shl(L_acc, exp) );
       exp_y2y2 = add(exp, 19-16);                          /* Q[19+exp-16] */
 
       g_coeff[2]     = y2y2;
@@ -61,7 +61,7 @@ void Corr_xy2(
          L_acc = L_mac(L_acc, xn[i], scaled_y2[i]);           /* L_acc:Q10 */
 
       exp      = norm_l(L_acc);
-      xny2     = round( L_shl(L_acc, exp) );
+      xny2     = _round( L_shl(L_acc, exp) );
       exp_xny2 = add(exp, 10-16);                          /* Q[10+exp-16] */
 
       g_coeff[3]     = negate(xny2);
@@ -73,7 +73,7 @@ void Corr_xy2(
          L_acc = L_mac(L_acc, y1[i], scaled_y2[i]);           /* L_acc:Q10 */
 
       exp      = norm_l(L_acc);
-      y1y2     = round( L_shl(L_acc, exp) );
+      y1y2     = _round( L_shl(L_acc, exp) );
       exp_y1y2 = add(exp, 10-16);                          /* Q[10+exp-16] */
 
       g_coeff[4]     = y1y2;

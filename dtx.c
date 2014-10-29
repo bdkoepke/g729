@@ -294,7 +294,7 @@ static void Calc_RCoeff(int16_t *Coeff, int16_t *RCoeff, int16_t *sh_RCoeff)
   /* Compute exponent RCoeff */
   sh1 = norm_l(L_acc);
   L_acc = L_shl(L_acc, sh1);
-  RCoeff[0] = round(L_acc);
+  RCoeff[0] = _round(L_acc);
   
   /* RCoeff[i] = SUM(j=0->M-i) Coeff[j] * Coeff[j+i] */
   for(i=1; i<=M; i++) {
@@ -303,7 +303,7 @@ static void Calc_RCoeff(int16_t *Coeff, int16_t *RCoeff, int16_t *sh_RCoeff)
       L_acc = L_mac(L_acc, Coeff[j], Coeff[j+i]);
     }
     L_acc = L_shl(L_acc, sh1);
-    RCoeff[i] = round(L_acc);
+    RCoeff[i] = _round(L_acc);
   }
   *sh_RCoeff = sh1;
   return;

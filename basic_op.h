@@ -30,7 +30,7 @@ int32_t L_mult(int16_t var1, int16_t var2);  /* Long mult,           1 */
 int16_t negate(int16_t var1);               /* Short negate,        1 */
 int16_t extract_h(int32_t L_var1);          /* Extract high,        1 */
 int16_t extract_l(int32_t L_var1);          /* Extract low,         1 */
-int16_t round(int32_t L_var1);              /* Round,               1 */
+int16_t _round(int32_t L_var1);              /* Round,               1 */
 int32_t L_mac(int32_t L_var3, int16_t var1, int16_t var2); /* Mac,    1 */
 int32_t L_msu(int32_t L_var3, int16_t var1, int16_t var2); /* Msu,    1 */
 int32_t L_macNs(int32_t L_var3, int16_t var1, int16_t var2);/* Mac without sat, 1*/

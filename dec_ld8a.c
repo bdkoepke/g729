@@ -325,7 +325,7 @@ void Decod_ld8a(
             L_temp = L_mult(exc[i+i_subfr], gain_pitch);
             L_temp = L_mac(L_temp, code[i], gain_code);
             L_temp = L_shl(L_temp, 1);
-            exc[i+i_subfr] = round(L_temp);
+            exc[i+i_subfr] = _round(L_temp);
           }
         
         Overflow = 0;
@@ -356,7 +356,7 @@ void Decod_ld8a(
       L_temp = L_mac(L_temp, exc[i], exc[i]);
     } /* may overflow => last level of SID quantizer */
     sh_sid_sav = norm_l(L_temp);
-    sid_sav = round(L_shl(L_temp, sh_sid_sav));
+    sid_sav = _round(L_shl(L_temp, sh_sid_sav));
     sh_sid_sav = sub(16, sh_sid_sav);
   }
 

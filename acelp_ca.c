@@ -498,10 +498,14 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
 
     for(i1=1; i1<L_SUBFR; i1+=STEP)
     {
-      *p0++ = mult(*p0, psign[i1]);
-      *p1++ = mult(*p1, psign[i1+1]);
-      *p2++ = mult(*p2, psign[i1+2]);
-      *p3++ = mult(*p3, psign[i1+3]);
+      *p0 = mult(*p0, psign[i1]);
+      *p0 = *p0 + 1;
+      *p1 = mult(*p1, psign[i1+1]);
+      *p1 = *p1 + 1;
+      *p2 = mult(*p2, psign[i1+2]);
+      *p2 = *p2 + 1;
+      *p3 = mult(*p3, psign[i1+3]);
+      *p3 = *p3 + 1;
     }
   }
 
@@ -516,9 +520,12 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
 
     for(i2=2; i2<L_SUBFR; i2+=STEP)
     {
-      *p0++ = mult(*p0, psign[i2]);
-      *p1++ = mult(*p1, psign[i2+1]);
-      *p2++ = mult(*p2, psign[i2+2]);
+      *p0 = mult(*p0, psign[i2]);
+      *p0 = *p0 + 1;
+      *p1 = mult(*p1, psign[i2+1]);
+      *p1 = *p1 + 1;
+      *p2 = mult(*p2, psign[i2+2]);
+      *p2 = *p2 + 1;
     }
   }
 
@@ -532,8 +539,10 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
 
     for(i3=3; i3<L_SUBFR; i3+=STEP)
     {
-      *p0++ = mult(*p0, psign[i3]);
-      *p1++ = mult(*p1, psign[i3+1]);
+      *p0 = mult(*p0, psign[i3]);
+      *p0 = *p0 + 1;
+      *p1 = mult(*p1, psign[i3+1]);
+      *p1 = *p1 + 1;
     }
   }
 
@@ -603,7 +612,7 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
         alp2 = L_mac(alp2, *p1++, _1_4);
 
         sq2 = mult(ps2, ps2);
-        alp_16 = round(alp2);
+        alp_16 = _round(alp2);
 
         s = L_msu(L_mult(alp,sq2),sq,alp_16);
         if (s > 0)
@@ -644,7 +653,7 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
       s = L_mult(*p0, _1_4);        p0 += NB_POS;
       s = L_mac(s, *p1, _1_4);      p1 += NB_POS;
       s = L_mac(s, *p2++, _1_8);
-      *p3++ = round(s);
+      *p3++ = _round(s);
     }
 
     /* i2 loop: 8 positions in track 0 */
@@ -676,7 +685,7 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
         alp2 = L_mac(alp2, *p4++, _1_2);
 
         sq2 = mult(ps2, ps2);
-        alp_16 = round(alp2);
+        alp_16 = _round(alp2);
 
         s = L_msu(L_mult(alp,sq2),sq,alp_16);
         if (s > 0)
@@ -749,7 +758,7 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
         alp2 = L_mac(alp2, *p1++, _1_4);
 
         sq2 = mult(ps2, ps2);
-        alp_16 = round(alp2);
+        alp_16 = _round(alp2);
 
         s = L_msu(L_mult(alp,sq2),sq,alp_16);
         if (s > 0)
@@ -790,7 +799,7 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
       s = L_mult(*p0, _1_4);         p0 += NB_POS;
       s = L_mac(s, *p1++, _1_4);
       s = L_mac(s, *p2++, _1_8);
-      *p3++ = round(s);
+      *p3++ = _round(s);
     }
 
     /* i2 loop: 8 positions in track 1 */
@@ -822,7 +831,7 @@ static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
         alp2 = L_mac(alp2, *p4++, _1_2);
 
         sq2 = mult(ps2, ps2);
-        alp_16 = round(alp2);
+        alp_16 = _round(alp2);
 
         s = L_msu(L_mult(alp,sq2),sq,alp_16);
         if (s > 0)

@@ -22,16 +22,16 @@
 
 /* local function */
 
-static void Get_lsp_pol(Word16 *lsp, Word32 *f);
+static void Get_lsp_pol(int16_t *lsp, int32_t *f);
 
 void Lsp_Az(
-  Word16 lsp[],    /* (i) Q15 : line spectral frequencies            */
-  Word16 a[]       /* (o) Q12 : predictor coefficients (order = 10)  */
+  int16_t lsp[],    /* (i) Q15 : line spectral frequencies            */
+  int16_t a[]       /* (o) Q12 : predictor coefficients (order = 10)  */
 )
 {
-  Word16 i, j;
-  Word32 f1[6], f2[6];
-  Word32 t0;
+  int16_t i, j;
+  int32_t f1[6], f2[6];
+  int32_t t0;
 
   Get_lsp_pol(&lsp[0],f1);
   Get_lsp_pol(&lsp[1],f2);
@@ -67,16 +67,16 @@ void Lsp_Az(
  *  f[]     : the coefficients of F1 or F2           in Q24  *
  *-----------------------------------------------------------*/
 
-static void Get_lsp_pol(Word16 *lsp, Word32 *f)
+static void Get_lsp_pol(int16_t *lsp, int32_t *f)
 {
-  Word16 i,j, hi, lo;
-  Word32 t0;
+  int16_t i,j, hi, lo;
+  int32_t t0;
 
    /* All computation in Q24 */
 
    *f = L_mult(4096, 2048);             /* f[0] = 1.0;             in Q24  */
    f++;
-   *f = L_msu((Word32)0, *lsp, 512);    /* f[1] =  -2.0 * lsp[0];  in Q24  */
+   *f = L_msu((int32_t)0, *lsp, 512);    /* f[1] =  -2.0 * lsp[0];  in Q24  */
 
    f++;
    lsp += 2;                            /* Advance lsp pointer             */
@@ -117,18 +117,18 @@ static void Get_lsp_pol(Word16 *lsp, Word32 *f)
 
 
 void Lsf_lsp(
-  Word16 lsf[],    /* (i) Q15 : lsf[m] normalized (range: 0.0<=val<=0.5) */
-  Word16 lsp[],    /* (o) Q15 : lsp[m] (range: -1<=val<1)                */
-  Word16 m         /* (i)     : LPC order                                */
+  int16_t lsf[],    /* (i) Q15 : lsf[m] normalized (range: 0.0<=val<=0.5) */
+  int16_t lsp[],    /* (o) Q15 : lsp[m] (range: -1<=val<1)                */
+  int16_t m         /* (i)     : LPC order                                */
 )
 {
-  Word16 i, ind, offset;
-  Word32 L_tmp;
+  int16_t i, ind, offset;
+  int32_t L_tmp;
 
   for(i=0; i<m; i++)
   {
     ind    = shr(lsf[i], 8);               /* ind    = b8-b15 of lsf[i] */
-    offset = lsf[i] & (Word16)0x00ff;      /* offset = b0-b7  of lsf[i] */
+    offset = lsf[i] & (int16_t)0x00ff;      /* offset = b0-b7  of lsf[i] */
 
     /* lsp[i] = table[ind]+ ((table[ind+1]-table[ind])*offset) / 256 */
 
@@ -140,17 +140,17 @@ void Lsf_lsp(
 
 
 void Lsp_lsf(
-  Word16 lsp[],    /* (i) Q15 : lsp[m] (range: -1<=val<1)                */
-  Word16 lsf[],    /* (o) Q15 : lsf[m] normalized (range: 0.0<=val<=0.5) */
-  Word16 m         /* (i)     : LPC order                                */
+  int16_t lsp[],    /* (i) Q15 : lsp[m] (range: -1<=val<1)                */
+  int16_t lsf[],    /* (o) Q15 : lsf[m] normalized (range: 0.0<=val<=0.5) */
+  int16_t m         /* (i)     : LPC order                                */
 )
 {
-  Word16 i, ind, tmp;
-  Word32 L_tmp;
+  int16_t i, ind, tmp;
+  int32_t L_tmp;
 
   ind = 63;    /* begin at end of table -1 */
 
-  for(i= m-(Word16)1; i >= 0; i--)
+  for(i= m-(int16_t)1; i >= 0; i--)
   {
     /* find value in table that is just greater than lsp[i] */
     while( sub(table[ind], lsp[i]) < 0 )
@@ -182,22 +182,22 @@ void Lsp_lsf(
 */
 
 void Lsf_lsp2(
-  Word16 lsf[],    /* (i) Q13 : lsf[m] (range: 0.0<=val<PI) */
-  Word16 lsp[],    /* (o) Q15 : lsp[m] (range: -1<=val<1)   */
-  Word16 m         /* (i)     : LPC order                   */
+  int16_t lsf[],    /* (i) Q13 : lsf[m] (range: 0.0<=val<PI) */
+  int16_t lsp[],    /* (o) Q15 : lsp[m] (range: -1<=val<1)   */
+  int16_t m         /* (i)     : LPC order                   */
 )
 {
-  Word16 i, ind;
-  Word16 offset;   /* in Q8 */
-  Word16 freq;     /* normalized frequency in Q15 */
-  Word32 L_tmp;
+  int16_t i, ind;
+  int16_t offset;   /* in Q8 */
+  int16_t freq;     /* normalized frequency in Q15 */
+  int32_t L_tmp;
 
   for(i=0; i<m; i++)
   {
 /*    freq = abs_s(freq);*/
     freq = mult(lsf[i], 20861);          /* 20861: 1.0/(2.0*PI) in Q17 */
     ind    = shr(freq, 8);               /* ind    = b8-b15 of freq */
-    offset = freq & (Word16)0x00ff;      /* offset = b0-b7  of freq */
+    offset = freq & (int16_t)0x00ff;      /* offset = b0-b7  of freq */
 
     if ( sub(ind, 63)>0 ){
       ind = 63;                 /* 0 <= ind <= 63 */
@@ -215,19 +215,19 @@ void Lsf_lsp2(
 
 
 void Lsp_lsf2(
-  Word16 lsp[],    /* (i) Q15 : lsp[m] (range: -1<=val<1)   */
-  Word16 lsf[],    /* (o) Q13 : lsf[m] (range: 0.0<=val<PI) */
-  Word16 m         /* (i)     : LPC order                   */
+  int16_t lsp[],    /* (i) Q15 : lsp[m] (range: -1<=val<1)   */
+  int16_t lsf[],    /* (o) Q13 : lsf[m] (range: 0.0<=val<PI) */
+  int16_t m         /* (i)     : LPC order                   */
 )
 {
-  Word16 i, ind;
-  Word16 offset;   /* in Q15 */
-  Word16 freq;     /* normalized frequency in Q16 */
-  Word32 L_tmp;
+  int16_t i, ind;
+  int16_t offset;   /* in Q15 */
+  int16_t freq;     /* normalized frequency in Q16 */
+  int32_t L_tmp;
 
   ind = 63;           /* begin at end of table2 -1 */
 
-  for(i= m-(Word16)1; i >= 0; i--)
+  for(i= m-(int16_t)1; i >= 0; i--)
   {
     /* find value in table2 that is just greater than lsp[i] */
     while( sub(table2[ind], lsp[i]) < 0 )
@@ -259,13 +259,13 @@ void Lsp_lsf2(
 
 
 void Weight_Az(
-  Word16 a[],      /* (i) Q12 : a[m+1]  LPC coefficients             */
-  Word16 gamma,    /* (i) Q15 : Spectral expansion factor.           */
-  Word16 m,        /* (i)     : LPC order.                           */
-  Word16 ap[]      /* (o) Q12 : Spectral expanded LPC coefficients   */
+  int16_t a[],      /* (i) Q12 : a[m+1]  LPC coefficients             */
+  int16_t gamma,    /* (i) Q15 : Spectral expansion factor.           */
+  int16_t m,        /* (i)     : LPC order.                           */
+  int16_t ap[]      /* (o) Q12 : Spectral expanded LPC coefficients   */
 )
 {
-  Word16 i, fac;
+  int16_t i, fac;
 
   ap[0] = a[0];
   fac   = gamma;
@@ -288,13 +288,13 @@ void Weight_Az(
 /* Interpolation of the quantized LSP's */
 
 void Int_qlpc(
- Word16 lsp_old[], /* input : LSP vector of past frame              */
- Word16 lsp_new[], /* input : LSP vector of present frame           */
- Word16 Az[]       /* output: interpolated Az() for the 2 subframes */
+ int16_t lsp_old[], /* input : LSP vector of past frame              */
+ int16_t lsp_new[], /* input : LSP vector of present frame           */
+ int16_t Az[]       /* output: interpolated Az() for the 2 subframes */
 )
 {
-  Word16 i;
-  Word16 lsp[M];
+  int16_t i;
+  int16_t lsp[M];
 
   /*  lsp[i] = lsp_new[i] * 0.5 + lsp_old[i] * 0.5 */
 

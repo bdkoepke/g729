@@ -26,24 +26,24 @@
  *---------------------------------------------------------------------------*/
 
 
-Word16 Pitch_ol_fast(  /* output: open loop pitch lag                        */
-   Word16 signal[],    /* input : signal used to compute the open loop pitch */
+int16_t Pitch_ol_fast(  /* output: open loop pitch lag                        */
+   int16_t signal[],    /* input : signal used to compute the open loop pitch */
                        /*     signal[-pit_max] to signal[-1] should be known */
-   Word16   pit_max,   /* input : maximum pitch lag                          */
-   Word16   L_frame    /* input : length of frame to compute pitch           */
+   int16_t   pit_max,   /* input : maximum pitch lag                          */
+   int16_t   L_frame    /* input : length of frame to compute pitch           */
 )
 {
-  Word16  i, j;
-  Word16  max1, max2, max3;
-  Word16  max_h, max_l, ener_h, ener_l;
-  Word16  T1, T2, T3;
-  Word16  *p, *p1;
-  Word32  max, sum, L_temp;
+  int16_t  i, j;
+  int16_t  max1, max2, max3;
+  int16_t  max_h, max_l, ener_h, ener_l;
+  int16_t  T1, T2, T3;
+  int16_t  *p, *p1;
+  int32_t  max, sum, L_temp;
 
   /* Scaled signal */
 
-  Word16 scaled_signal[L_FRAME+PIT_MAX];
-  Word16 *scal_sig;
+  int16_t scaled_signal[L_FRAME+PIT_MAX];
+  int16_t *scal_sig;
 
   scal_sig = &scaled_signal[pit_max];
 
@@ -73,8 +73,8 @@ Word16 Pitch_ol_fast(  /* output: open loop pitch lag                        */
      }
    }
    else {
-     L_temp = L_sub(sum, (Word32)1048576L);
-     if ( L_temp < (Word32)0 )  /* if (sum < 2^20) */
+     L_temp = L_sub(sum, (int32_t)1048576L);
+     if ( L_temp < (int32_t)0 )  /* if (sum < 2^20) */
      {
         for(i=-pit_max; i<L_frame; i++)
         {
@@ -184,7 +184,7 @@ Word16 Pitch_ol_fast(  /* output: open loop pitch lag                        */
      for (j=0; j<L_frame; j+=2, p+=2, p1+=2)
          sum = L_mac(sum, *p, *p1);
      L_temp = L_sub(sum, max);
-     if (L_temp > 0) { max = sum; T3 = i+(Word16)1;   }
+     if (L_temp > 0) { max = sum; T3 = i+(int16_t)1;   }
 
      p  = scal_sig;
      p1 = &scal_sig[-(i-1)];
@@ -192,7 +192,7 @@ Word16 Pitch_ol_fast(  /* output: open loop pitch lag                        */
      for (j=0; j<L_frame; j+=2, p+=2, p1+=2)
          sum = L_mac(sum, *p, *p1);
      L_temp = L_sub(sum, max);
-     if (L_temp > 0) { max = sum; T3 = i-(Word16)1;   }
+     if (L_temp > 0) { max = sum; T3 = i-(int16_t)1;   }
 
     /* compute energy of maximum */
 
@@ -263,14 +263,14 @@ Word16 Pitch_ol_fast(  /* output: open loop pitch lag                        */
  *  ~~~~~~~~~~~~~~~~~~~~~~                                                  *
  *--------------------------------------------------------------------------*/
 
-Word32 Dot_Product(      /* (o)   :Result of scalar product. */
-       Word16   x[],     /* (i)   :First vector.             */
-       Word16   y[],     /* (i)   :Second vector.            */
-       Word16   lg       /* (i)   :Number of point.          */
+int32_t Dot_Product(      /* (o)   :Result of scalar product. */
+       int16_t   x[],     /* (i)   :First vector.             */
+       int16_t   y[],     /* (i)   :Second vector.            */
+       int16_t   lg       /* (i)   :Number of point.          */
 )
 {
-  Word16 i;
-  Word32 sum;
+  int16_t i;
+  int32_t sum;
 
   sum = 0;
   for(i=0; i<lg; i++)
@@ -285,21 +285,21 @@ Word32 Dot_Product(      /* (o)   :Result of scalar product. */
  * Fast version of the pitch close loop.                                    *
  *--------------------------------------------------------------------------*/
 
-Word16 Pitch_fr3_fast(/* (o)     : pitch period.                          */
-  Word16 exc[],       /* (i)     : excitation buffer                      */
-  Word16 xn[],        /* (i)     : target vector                          */
-  Word16 h[],         /* (i) Q12 : impulse response of filters.           */
-  Word16 L_subfr,     /* (i)     : Length of subframe                     */
-  Word16 t0_min,      /* (i)     : minimum value in the searched range.   */
-  Word16 t0_max,      /* (i)     : maximum value in the searched range.   */
-  Word16 i_subfr,     /* (i)     : indicator for first subframe.          */
-  Word16 *pit_frac    /* (o)     : chosen fraction.                       */
+int16_t Pitch_fr3_fast(/* (o)     : pitch period.                          */
+  int16_t exc[],       /* (i)     : excitation buffer                      */
+  int16_t xn[],        /* (i)     : target vector                          */
+  int16_t h[],         /* (i) Q12 : impulse response of filters.           */
+  int16_t L_subfr,     /* (i)     : Length of subframe                     */
+  int16_t t0_min,      /* (i)     : minimum value in the searched range.   */
+  int16_t t0_max,      /* (i)     : maximum value in the searched range.   */
+  int16_t i_subfr,     /* (i)     : indicator for first subframe.          */
+  int16_t *pit_frac    /* (o)     : chosen fraction.                       */
 )
 {
-  Word16 t, t0;
-  Word16 Dn[L_SUBFR];
-  Word16 exc_tmp[L_SUBFR];
-  Word32 max, corr, L_temp;
+  int16_t t, t0;
+  int16_t Dn[L_SUBFR];
+  int16_t exc_tmp[L_SUBFR];
+  int32_t max, corr, L_temp;
 
  /*-----------------------------------------------------------------*
   * Compute correlation of target vector with impulse response.     *
@@ -375,18 +375,18 @@ Word16 Pitch_fr3_fast(/* (o)     : pitch period.                          */
  *---------------------------------------------------------------------*/
 
 
-Word16 G_pitch(      /* (o) Q14 : Gain of pitch lag saturated to 1.2       */
-  Word16 xn[],       /* (i)     : Pitch target.                            */
-  Word16 y1[],       /* (i)     : Filtered adaptive codebook.              */
-  Word16 g_coeff[],  /* (i)     : Correlations need for gain quantization. */
-  Word16 L_subfr     /* (i)     : Length of subframe.                      */
+int16_t G_pitch(      /* (o) Q14 : Gain of pitch lag saturated to 1.2       */
+  int16_t xn[],       /* (i)     : Pitch target.                            */
+  int16_t y1[],       /* (i)     : Filtered adaptive codebook.              */
+  int16_t g_coeff[],  /* (i)     : Correlations need for gain quantization. */
+  int16_t L_subfr     /* (i)     : Length of subframe.                      */
 )
 {
-   Word16 i;
-   Word16 xy, yy, exp_xy, exp_yy, gain;
-   Word32 s;
+   int16_t i;
+   int16_t xy, yy, exp_xy, exp_yy, gain;
+   int32_t s;
 
-   Word16 scaled_y1[L_SUBFR];
+   int16_t scaled_y1[L_SUBFR];
 
    /* divide "y1[]" by 4 to avoid overflow */
 
@@ -444,7 +444,7 @@ Word16 G_pitch(      /* (o) Q14 : Gain of pitch lag saturated to 1.2       */
    if (xy <= 0)
    {
       g_coeff[3] = -15;   /* Force exp_xy to -15 = (15-30) */
-      return( (Word16) 0);
+      return( (int16_t) 0);
    }
 
    /* compute gain = xy/yy */
@@ -493,17 +493,17 @@ Word16 G_pitch(      /* (o) Q14 : Gain of pitch lag saturated to 1.2       */
  *----------------------------------------------------------------------*/
 
 
-Word16 Enc_lag3(     /* output: Return index of encoding */
-  Word16 T0,         /* input : Pitch delay              */
-  Word16 T0_frac,    /* input : Fractional pitch delay   */
-  Word16 *T0_min,    /* in/out: Minimum search delay     */
-  Word16 *T0_max,    /* in/out: Maximum search delay     */
-  Word16 pit_min,    /* input : Minimum pitch delay      */
-  Word16 pit_max,    /* input : Maximum pitch delay      */
-  Word16 pit_flag    /* input : Flag for 1st subframe    */
+int16_t Enc_lag3(     /* output: Return index of encoding */
+  int16_t T0,         /* input : Pitch delay              */
+  int16_t T0_frac,    /* input : Fractional pitch delay   */
+  int16_t *T0_min,    /* in/out: Minimum search delay     */
+  int16_t *T0_max,    /* in/out: Maximum search delay     */
+  int16_t pit_min,    /* input : Minimum pitch delay      */
+  int16_t pit_max,    /* input : Maximum pitch delay      */
+  int16_t pit_flag    /* input : int32_t for 1st subframe    */
 )
 {
-  Word16 index, i;
+  int16_t index, i;
 
   if (pit_flag == 0)   /* if 1st subframe */
   {

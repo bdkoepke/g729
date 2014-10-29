@@ -32,19 +32,19 @@
 */
 
 
-Word32 Pow2(        /* (o) Q0  : result       (range: 0<=val<=0x7fffffff) */
-  Word16 exponent,  /* (i) Q0  : Integer part.      (range: 0<=val<=30)   */
-  Word16 fraction   /* (i) Q15 : Fractional part.   (range: 0.0<=val<1.0) */
+int32_t Pow2(        /* (o) Q0  : result       (range: 0<=val<=0x7fffffff) */
+  int16_t exponent,  /* (i) Q0  : Integer part.      (range: 0<=val<=30)   */
+  int16_t fraction   /* (i) Q15 : Fractional part.   (range: 0.0<=val<1.0) */
 )
 {
-  Word16 exp, i, a, tmp;
-  Word32 L_x;
+  int16_t exp, i, a, tmp;
+  int32_t L_x;
 
   L_x = L_mult(fraction, 32);           /* L_x = fraction<<6           */
   i   = extract_h(L_x);                 /* Extract b10-b15 of fraction */
   L_x = L_shr(L_x, 1);
   a   = extract_l(L_x);                 /* Extract b0-b9   of fraction */
-  a   = a & (Word16)0x7fff;
+  a   = a & (int16_t)0x7fff;
 
   L_x = L_deposit_h(tabpow[i]);         /* tabpow[i] << 16        */
   tmp = sub(tabpow[i], tabpow[i+1]);    /* tabpow[i] - tabpow[i+1] */
@@ -80,15 +80,15 @@ Word32 Pow2(        /* (o) Q0  : result       (range: 0<=val<=0x7fffffff) */
 */
 
 void Log2(
-  Word32 L_x,       /* (i) Q0 : input value                                 */
-  Word16 *exponent, /* (o) Q0 : Integer part of Log2.   (range: 0<=val<=30) */
-  Word16 *fraction  /* (o) Q15: Fractional  part of Log2. (range: 0<=val<1) */
+  int32_t L_x,       /* (i) Q0 : input value                                 */
+  int16_t *exponent, /* (o) Q0 : Integer part of Log2.   (range: 0<=val<=30) */
+  int16_t *fraction  /* (o) Q15: Fractional  part of Log2. (range: 0<=val<1) */
 )
 {
-  Word16 exp, i, a, tmp;
-  Word32 L_y;
+  int16_t exp, i, a, tmp;
+  int32_t L_y;
 
-  if( L_x <= (Word32)0 )
+  if( L_x <= (int32_t)0 )
   {
     *exponent = 0;
     *fraction = 0;
@@ -104,7 +104,7 @@ void Log2(
   i   = extract_h(L_x);                 /* Extract b25-b31 */
   L_x = L_shr(L_x, 1);
   a   = extract_l(L_x);                 /* Extract b10-b24 of fraction */
-  a   = a & (Word16)0x7fff;
+  a   = a & (int16_t)0x7fff;
 
   i   = sub(i, 32);
 
@@ -143,14 +143,14 @@ void Log2(
 */
 
 
-Word32 Inv_sqrt(   /* (o) Q30 : output value   (range: 0<=val<1)           */
-  Word32 L_x       /* (i) Q0  : input value    (range: 0<=val<=7fffffff)   */
+int32_t Inv_sqrt(   /* (o) Q30 : output value   (range: 0<=val<1)           */
+  int32_t L_x       /* (i) Q0  : input value    (range: 0<=val<=7fffffff)   */
 )
 {
-  Word16 exp, i, a, tmp;
-  Word32 L_y;
+  int16_t exp, i, a, tmp;
+  int32_t L_y;
 
-  if( L_x <= (Word32)0) return ( (Word32)0x3fffffffL);
+  if( L_x <= (int32_t)0) return ( (int32_t)0x3fffffffL);
 
   exp = norm_l(L_x);
   L_x = L_shl(L_x, exp );               /* L_x is normalize */
@@ -166,7 +166,7 @@ Word32 Inv_sqrt(   /* (o) Q30 : output value   (range: 0<=val<1)           */
   i   = extract_h(L_x);                 /* Extract b25-b31 */
   L_x = L_shr(L_x, 1);
   a   = extract_l(L_x);                 /* Extract b10-b24 */
-  a   = a & (Word16)0x7fff;
+  a   = a & (int16_t)0x7fff;
 
   i   = sub(i, 16);
 

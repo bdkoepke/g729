@@ -22,18 +22,18 @@
 #include "tab_ld8a.h"
 
 void Autocorr(
-  Word16 x[],      /* (i)    : Input signal                      */
-  Word16 m,        /* (i)    : LPC order                         */
-  Word16 r_h[],    /* (o)    : Autocorrelations  (msb)           */
-  Word16 r_l[],    /* (o)    : Autocorrelations  (lsb)           */
-  Word16 *exp_R0
+  int16_t x[],      /* (i)    : Input signal                      */
+  int16_t m,        /* (i)    : LPC order                         */
+  int16_t r_h[],    /* (o)    : Autocorrelations  (msb)           */
+  int16_t r_l[],    /* (o)    : Autocorrelations  (lsb)           */
+  int16_t *exp_R0
 )
 {
-  Word16 i, j, norm;
-  Word16 y[L_WINDOW];
-  Word32 sum;
+  int16_t i, j, norm;
+  int16_t y[L_WINDOW];
+  int32_t sum;
 
-  extern Flag Overflow;
+  extern int32_t Overflow;
 
   /* Windowing of signal */
 
@@ -100,13 +100,13 @@ void Autocorr(
  *-------------------------------------------------------*/
 
 void Lag_window(
-  Word16 m,         /* (i)     : LPC order                        */
-  Word16 r_h[],     /* (i/o)   : Autocorrelations  (msb)          */
-  Word16 r_l[]      /* (i/o)   : Autocorrelations  (lsb)          */
+  int16_t m,         /* (i)     : LPC order                        */
+  int16_t r_h[],     /* (i/o)   : Autocorrelations  (msb)          */
+  int16_t r_l[]      /* (i/o)   : Autocorrelations  (lsb)          */
 )
 {
-  Word16 i;
-  Word32 x;
+  int16_t i;
+  int32_t x;
 
   for(i=1; i<=m; i++)
   {
@@ -188,24 +188,24 @@ void Lag_window(
 
 /* Last A(z) for case of unstable filter */
 
-static Word16 old_A[M+1]={4096,0,0,0,0,0,0,0,0,0,0};
-static Word16 old_rc[2]={0,0};
+static int16_t old_A[M+1]={4096,0,0,0,0,0,0,0,0,0,0};
+static int16_t old_rc[2]={0,0};
 
 void Levinson(
-  Word16 Rh[],      /* (i)     : Rh[M+1] Vector of autocorrelations (msb) */
-  Word16 Rl[],      /* (i)     : Rl[M+1] Vector of autocorrelations (lsb) */
-  Word16 A[],       /* (o) Q12 : A[M]    LPC coefficients  (m = 10)       */
-  Word16 rc[],      /* (o) Q15 : rc[M]   Reflection coefficients.         */
-  Word16 *Err       /* (o)     : Residual energy                          */
+  int16_t Rh[],      /* (i)     : Rh[M+1] Vector of autocorrelations (msb) */
+  int16_t Rl[],      /* (i)     : Rl[M+1] Vector of autocorrelations (lsb) */
+  int16_t A[],       /* (o) Q12 : A[M]    LPC coefficients  (m = 10)       */
+  int16_t rc[],      /* (o) Q15 : rc[M]   Reflection coefficients.         */
+  int16_t *Err       /* (o)     : Residual energy                          */
 )
 {
- Word16 i, j;
- Word16 hi, lo;
- Word16 Kh, Kl;                /* reflection coefficient; hi and lo           */
- Word16 alp_h, alp_l, alp_exp; /* Prediction gain; hi lo and exponent         */
- Word16 Ah[M+1], Al[M+1];      /* LPC coef. in double prec.                   */
- Word16 Anh[M+1], Anl[M+1];    /* LPC coef.for next iteration in double prec. */
- Word32 t0, t1, t2;            /* temporary variable                          */
+ int16_t i, j;
+ int16_t hi, lo;
+ int16_t Kh, Kl;                /* reflection coefficient; hi and lo           */
+ int16_t alp_h, alp_l, alp_exp; /* Prediction gain; hi lo and exponent         */
+ int16_t Ah[M+1], Al[M+1];      /* LPC coef. in double prec.                   */
+ int16_t Anh[M+1], Anl[M+1];    /* LPC coef.for next iteration in double prec. */
+ int32_t t0, t1, t2;            /* temporary variable                          */
 
 
 /* K = A[1] = -R[1] / R[0] */
@@ -223,7 +223,7 @@ void Levinson(
 
   t0 = Mpy_32(Kh ,Kl, Kh, Kl);          /* K*K      in Q31 */
   t0 = L_abs(t0);                       /* Some case <0 !! */
-  t0 = L_sub( (Word32)0x7fffffffL, t0 ); /* 1 - K*K  in Q31 */
+  t0 = L_sub( (int32_t)0x7fffffffL, t0 ); /* 1 - K*K  in Q31 */
   L_Extract(t0, &hi, &lo);              /* DPF format      */
   t0 = Mpy_32(Rh[0] ,Rl[0], hi, lo);    /* Alpha in Q31    */
 
@@ -293,7 +293,7 @@ void Levinson(
 
     t0 = Mpy_32(Kh ,Kl, Kh, Kl);          /* K*K      in Q31 */
     t0 = L_abs(t0);                       /* Some case <0 !! */
-    t0 = L_sub( (Word32)0x7fffffffL, t0 ); /* 1 - K*K  in Q31 */
+    t0 = L_sub( (int32_t)0x7fffffffL, t0 ); /* 1 - K*K  in Q31 */
     L_Extract(t0, &hi, &lo);              /* DPF format      */
     t0 = Mpy_32(alp_h , alp_l, hi, lo);   /* Alpha in Q31    */
 
@@ -340,23 +340,23 @@ void Levinson(
 
 /* local function */
 
-static Word16 Chebps_11(Word16 x, Word16 f[], Word16 n);
-static Word16 Chebps_10(Word16 x, Word16 f[], Word16 n);
+static int16_t Chebps_11(int16_t x, int16_t f[], int16_t n);
+static int16_t Chebps_10(int16_t x, int16_t f[], int16_t n);
 
 void Az_lsp(
-  Word16 a[],        /* (i) Q12 : predictor coefficients              */
-  Word16 lsp[],      /* (o) Q15 : line spectral pairs                 */
-  Word16 old_lsp[]   /* (i)     : old lsp[] (in case not found 10 roots) */
+  int16_t a[],        /* (i) Q12 : predictor coefficients              */
+  int16_t lsp[],      /* (o) Q15 : line spectral pairs                 */
+  int16_t old_lsp[]   /* (i)     : old lsp[] (in case not found 10 roots) */
 )
 {
- Word16 i, j, nf, ip;
- Word16 xlow, ylow, xhigh, yhigh, xmid, ymid, xint;
- Word16 x, y, sign, exp;
- Word16 *coef;
- Word16 f1[M/2+1], f2[M/2+1];
- Word32 t0, L_temp;
- Flag   ovf_coef;
- Word16 (*pChebps)(Word16 x, Word16 f[], Word16 n);
+ int16_t i, j, nf, ip;
+ int16_t xlow, ylow, xhigh, yhigh, xmid, ymid, xint;
+ int16_t x, y, sign, exp;
+ int16_t *coef;
+ int16_t f1[M/2+1], f2[M/2+1];
+ int32_t t0, L_temp;
+ int32_t   ovf_coef;
+ int16_t (*pChebps)(int16_t x, int16_t f[], int16_t n);
 
 /*-------------------------------------------------------------*
  *  find the sum and diff. pol. F1(z) and F2(z)                *
@@ -449,7 +449,7 @@ void Az_lsp(
    ylow  = (*pChebps)(xlow,coef,NC);
 
    L_temp = L_mult(ylow ,yhigh);
-   if ( L_temp <= (Word32)0)
+   if ( L_temp <= (int32_t)0)
    {
 
      /* divide 2 times the interval */
@@ -461,7 +461,7 @@ void Az_lsp(
        ymid = (*pChebps)(xmid,coef,NC);
 
        L_temp = L_mult(ylow,ymid);
-       if ( L_temp <= (Word32)0)
+       if ( L_temp <= (int32_t)0)
        {
          yhigh = ymid;
          xhigh = xmid;
@@ -491,7 +491,7 @@ void Az_lsp(
        y   = abs_s(y);
        exp = norm_s(y);
        y   = shl(y, exp);
-       y   = div_s( (Word16)16383, y);
+       y   = div_s( (int16_t)16383, y);
        t0  = L_mult(x, y);
        t0  = L_shr(t0, sub(20, exp) );
        y   = extract_l(t0);            /* y= (xhigh-xlow)/(yhigh-ylow) in Q11 */
@@ -556,11 +556,11 @@ void Az_lsp(
  * The value of C(x) is returned. (Saturated to +-1.99 in Q14)  *
  *                                                              *
  *--------------------------------------------------------------*/
-static Word16 Chebps_11(Word16 x, Word16 f[], Word16 n)
+static int16_t Chebps_11(int16_t x, int16_t f[], int16_t n)
 {
-  Word16 i, cheb;
-  Word16 b0_h, b0_l, b1_h, b1_l, b2_h, b2_l;
-  Word32 t0;
+  int16_t i, cheb;
+  int16_t b0_h, b0_l, b1_h, b1_l, b2_h, b2_l;
+  int32_t t0;
 
  /* Note: All computation are done in Q24. */
 
@@ -575,7 +575,7 @@ static Word16 Chebps_11(Word16 x, Word16 f[], Word16 n)
   {
     t0 = Mpy_32_16(b1_h, b1_l, x);      /* t0 = 2.0*x*b1              */
     t0 = L_shl(t0, 1);
-    t0 = L_mac(t0,b2_h,(Word16)-32768L);/* t0 = 2.0*x*b1 - b2         */
+    t0 = L_mac(t0,b2_h,(int16_t)-32768L);/* t0 = 2.0*x*b1 - b2         */
     t0 = L_msu(t0, b2_l, 1);
     t0 = L_mac(t0, f[i], 4096);         /* t0 = 2.0*x*b1 - b2 + f[i]; */
 
@@ -588,7 +588,7 @@ static Word16 Chebps_11(Word16 x, Word16 f[], Word16 n)
   }
 
   t0 = Mpy_32_16(b1_h, b1_l, x);        /* t0 = x*b1;              */
-  t0 = L_mac(t0, b2_h,(Word16)-32768L); /* t0 = x*b1 - b2          */
+  t0 = L_mac(t0, b2_h,(int16_t)-32768L); /* t0 = x*b1 - b2          */
   t0 = L_msu(t0, b2_l, 1);
   t0 = L_mac(t0, f[i], 2048);           /* t0 = x*b1 - b2 + f[i]/2 */
 
@@ -600,11 +600,11 @@ static Word16 Chebps_11(Word16 x, Word16 f[], Word16 n)
 }
 
 
-static Word16 Chebps_10(Word16 x, Word16 f[], Word16 n)
+static int16_t Chebps_10(int16_t x, int16_t f[], int16_t n)
 {
-  Word16 i, cheb;
-  Word16 b0_h, b0_l, b1_h, b1_l, b2_h, b2_l;
-  Word32 t0;
+  int16_t i, cheb;
+  int16_t b0_h, b0_l, b1_h, b1_l, b2_h, b2_l;
+  int32_t t0;
 
  /* Note: All computation are done in Q23. */
 
@@ -619,7 +619,7 @@ static Word16 Chebps_10(Word16 x, Word16 f[], Word16 n)
   {
     t0 = Mpy_32_16(b1_h, b1_l, x);      /* t0 = 2.0*x*b1              */
     t0 = L_shl(t0, 1);
-    t0 = L_mac(t0,b2_h,(Word16)-32768L);/* t0 = 2.0*x*b1 - b2         */
+    t0 = L_mac(t0,b2_h,(int16_t)-32768L);/* t0 = 2.0*x*b1 - b2         */
     t0 = L_msu(t0, b2_l, 1);
     t0 = L_mac(t0, f[i], 4096);         /* t0 = 2.0*x*b1 - b2 + f[i]; */
 
@@ -632,7 +632,7 @@ static Word16 Chebps_10(Word16 x, Word16 f[], Word16 n)
   }
 
   t0 = Mpy_32_16(b1_h, b1_l, x);        /* t0 = x*b1;              */
-  t0 = L_mac(t0, b2_h,(Word16)-32768L); /* t0 = x*b1 - b2          */
+  t0 = L_mac(t0, b2_h,(int16_t)-32768L); /* t0 = x*b1 - b2          */
   t0 = L_msu(t0, b2_l, 1);
   t0 = L_mac(t0, f[i], 2048);           /* t0 = x*b1 - b2 + f[i]/2 */
 

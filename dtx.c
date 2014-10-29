@@ -22,31 +22,31 @@
 #include "sid.h"
 
 /* Static Variables */
-static Word16 lspSid_q[M] ;
-static Word16 pastCoeff[MP1];
-static Word16 RCoeff[MP1];
-static Word16 sh_RCoeff;
-static Word16 Acf[SIZ_ACF];
-static Word16 sh_Acf[NB_CURACF];
-static Word16 sumAcf[SIZ_SUMACF];
-static Word16 sh_sumAcf[NB_SUMACF];
-static Word16 ener[NB_GAIN];
-static Word16 sh_ener[NB_GAIN];
-static Word16 fr_cur;
-static Word16 cur_gain;
-static Word16 nb_ener;
-static Word16 sid_gain;
-static Word16 flag_chang;
-static Word16 prev_energy;
-static Word16 count_fr0;
+static int16_t lspSid_q[M] ;
+static int16_t pastCoeff[MP1];
+static int16_t RCoeff[MP1];
+static int16_t sh_RCoeff;
+static int16_t Acf[SIZ_ACF];
+static int16_t sh_Acf[NB_CURACF];
+static int16_t sumAcf[SIZ_SUMACF];
+static int16_t sh_sumAcf[NB_SUMACF];
+static int16_t ener[NB_GAIN];
+static int16_t sh_ener[NB_GAIN];
+static int16_t fr_cur;
+static int16_t cur_gain;
+static int16_t nb_ener;
+static int16_t sid_gain;
+static int16_t flag_chang;
+static int16_t prev_energy;
+static int16_t count_fr0;
 
 /* Local functions */
-static void Calc_pastfilt(Word16 *Coeff);
-static void Calc_RCoeff(Word16 *Coeff, Word16 *RCoeff, Word16 *sh_RCoeff);
-static Word16 Cmp_filt(Word16 *RCoeff, Word16 sh_RCoeff, Word16 *acf,
-                                        Word16 alpha, Word16 Fracthresh);
-static void Calc_sum_acf(Word16 *acf, Word16 *sh_acf,
-                    Word16 *sum, Word16 *sh_sum, Word16 nb);
+static void Calc_pastfilt(int16_t *Coeff);
+static void Calc_RCoeff(int16_t *Coeff, int16_t *RCoeff, int16_t *sh_RCoeff);
+static int16_t Cmp_filt(int16_t *RCoeff, int16_t sh_RCoeff, int16_t *acf,
+                                        int16_t alpha, int16_t Fracthresh);
+static void Calc_sum_acf(int16_t *acf, int16_t *sh_acf,
+                    int16_t *sum, int16_t *sh_sum, int16_t nb);
 static void Update_sumAcf(void);
 
 /*-----------------------------------------------------------*
@@ -56,7 +56,7 @@ static void Update_sumAcf(void);
  *-----------------------------------------------------------*/
 void Init_Cod_cng(void)
 {
-  Word16 i;
+  int16_t i;
 
   for(i=0; i<SIZ_SUMACF; i++) sumAcf[i] = 0;
   for(i=0; i<NB_SUMACF; i++) sh_sumAcf[i] = 40;
@@ -83,26 +83,26 @@ void Init_Cod_cng(void)
  *   computes CNG excitation for encoder update              *
  *-----------------------------------------------------------*/
 void Cod_cng(
-  Word16 *exc,          /* (i/o) : excitation array                     */
-  Word16 pastVad,       /* (i)   : previous VAD decision                */
-  Word16 *lsp_old_q,    /* (i/o) : previous quantized lsp               */
-  Word16 *Aq,           /* (o)   : set of interpolated LPC coefficients */
-  Word16 *ana,          /* (o)   : coded SID parameters                 */
-  Word16 freq_prev[MA_NP][M],
+  int16_t *exc,          /* (i/o) : excitation array                     */
+  int16_t pastVad,       /* (i)   : previous VAD decision                */
+  int16_t *lsp_old_q,    /* (i/o) : previous quantized lsp               */
+  int16_t *Aq,           /* (o)   : set of interpolated LPC coefficients */
+  int16_t *ana,          /* (o)   : coded SID parameters                 */
+  int16_t freq_prev[MA_NP][M],
                         /* (i/o) : previous LPS for quantization        */
-  Word16 *seed          /* (i/o) : random generator seed                */
+  int16_t *seed          /* (i/o) : random generator seed                */
 )
 {
 
-  Word16 i;
+  int16_t i;
 
-  Word16 curAcf[MP1];
-  Word16 bid[M], zero[MP1];
-  Word16 curCoeff[MP1];
-  Word16 lsp_new[M];
-  Word16 *lpcCoeff;
-  Word16 cur_igain;
-  Word16 energyq, temp;
+  int16_t curAcf[MP1];
+  int16_t bid[M], zero[MP1];
+  int16_t curCoeff[MP1];
+  int16_t lsp_new[M];
+  int16_t *lpcCoeff;
+  int16_t cur_igain;
+  int16_t energyq, temp;
 
   /* Update Ener and sh_ener */
   for(i = NB_GAIN-1; i>=1; i--) {
@@ -236,13 +236,13 @@ void Cod_cng(
  *   If Vad=1 : updating of array sumAcf                     *
  *-----------------------------------------------------------*/
 void Update_cng(
-  Word16 *r_h,      /* (i) :   MSB of frame autocorrelation        */
-  Word16 exp_r,     /* (i) :   scaling factor associated           */
-  Word16 Vad        /* (i) :   current Vad decision                */
+  int16_t *r_h,      /* (i) :   MSB of frame autocorrelation        */
+  int16_t exp_r,     /* (i) :   scaling factor associated           */
+  int16_t Vad        /* (i) :   current Vad decision                */
 )
 {
-  Word16 i;
-  Word16 *ptr1, *ptr2;
+  int16_t i;
+  int16_t *ptr1, *ptr2;
 
   /* Update Acf and shAcf */
   ptr1 = Acf + SIZ_ACF - 1;
@@ -279,11 +279,11 @@ void Update_cng(
 
 /* Compute scaled autocorr of LPC coefficients used for Itakura distance */
 /*************************************************************************/
-static void Calc_RCoeff(Word16 *Coeff, Word16 *RCoeff, Word16 *sh_RCoeff)
+static void Calc_RCoeff(int16_t *Coeff, int16_t *RCoeff, int16_t *sh_RCoeff)
 {
-  Word16 i, j;
-  Word16 sh1;
-  Word32 L_acc;
+  int16_t i, j;
+  int16_t sh1;
+  int32_t L_acc;
   
   /* RCoeff[0] = SUM(j=0->M) Coeff[j] ** 2 */
   L_acc = 0L;
@@ -311,14 +311,14 @@ static void Calc_RCoeff(Word16 *Coeff, Word16 *RCoeff, Word16 *sh_RCoeff)
 
 /* Compute Itakura distance and compare to threshold */
 /*****************************************************/
-static Word16 Cmp_filt(Word16 *RCoeff, Word16 sh_RCoeff, Word16 *acf,
-                                        Word16 alpha, Word16 FracThresh)
+static int16_t Cmp_filt(int16_t *RCoeff, int16_t sh_RCoeff, int16_t *acf,
+                                        int16_t alpha, int16_t FracThresh)
 {
-  Word32 L_temp0, L_temp1;
-  Word16 temp1, temp2, sh[2], ind;
-  Word16 i;
-  Word16 diff, flag;
-  extern Flag Overflow;
+  int32_t L_temp0, L_temp1;
+  int16_t temp1, temp2, sh[2], ind;
+  int16_t i;
+  int16_t diff, flag;
+  extern int32_t Overflow;
 
   sh[0] = 0;
   sh[1] = 0;
@@ -358,12 +358,12 @@ static Word16 Cmp_filt(Word16 *RCoeff, Word16 sh_RCoeff, Word16 *acf,
 
 /* Compute past average filter */
 /*******************************/
-static void Calc_pastfilt(Word16 *Coeff)
+static void Calc_pastfilt(int16_t *Coeff)
 {
-  Word16 i;
-  Word16 s_sumAcf[MP1];
-  Word16 bid[M], zero[MP1];
-  Word16 temp;
+  int16_t i;
+  int16_t s_sumAcf[MP1];
+  int16_t bid[M], zero[MP1];
+  int16_t temp;
   
   Calc_sum_acf(sumAcf, sh_sumAcf, s_sumAcf, &temp, NB_SUMACF);
   
@@ -382,8 +382,8 @@ static void Calc_pastfilt(Word16 *Coeff)
 /*****************/
 static void Update_sumAcf(void)
 {
-  Word16 *ptr1, *ptr2;
-  Word16 i;
+  int16_t *ptr1, *ptr2;
+  int16_t i;
 
   /*** Move sumAcf ***/
   ptr1 = sumAcf + SIZ_SUMACF - 1;
@@ -402,14 +402,14 @@ static void Update_sumAcf(void)
 
 /* Compute sum of acfs (curAcf, sumAcf or s_sumAcf) */
 /****************************************************/
-static void Calc_sum_acf(Word16 *acf, Word16 *sh_acf,
-                         Word16 *sum, Word16 *sh_sum, Word16 nb)
+static void Calc_sum_acf(int16_t *acf, int16_t *sh_acf,
+                         int16_t *sum, int16_t *sh_sum, int16_t nb)
 {
 
-  Word16 *ptr1;
-  Word32 L_temp, L_tab[MP1];
-  Word16 sh0, temp;
-  Word16 i, j;
+  int16_t *ptr1;
+  int32_t L_temp, L_tab[MP1];
+  int16_t sh0, temp;
+  int16_t i, j;
   
   /* Compute sum = sum of nb acfs */
   /* Find sh_acf minimum */

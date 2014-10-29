@@ -32,25 +32,25 @@
  *                                                                           *
  *---------------------------------------------------------------------------*/
 void Dec_gain(
-   Word16 index,        /* (i)     :Index of quantization.         */
-   Word16 code[],       /* (i) Q13 :Innovative vector.             */
-   Word16 L_subfr,      /* (i)     :Subframe length.               */
-   Word16 bfi,          /* (i)     :Bad frame indicator            */
-   Word16 *gain_pit,    /* (o) Q14 :Pitch gain.                    */
-   Word16 *gain_cod     /* (o) Q1  :Code gain.                     */
+   int16_t index,        /* (i)     :Index of quantization.         */
+   int16_t code[],       /* (i) Q13 :Innovative vector.             */
+   int16_t L_subfr,      /* (i)     :Subframe length.               */
+   int16_t bfi,          /* (i)     :Bad frame indicator            */
+   int16_t *gain_pit,    /* (o) Q14 :Pitch gain.                    */
+   int16_t *gain_cod     /* (o) Q1  :Code gain.                     */
 )
 {
-   Word16  index1, index2, tmp;
-   Word16  gcode0, exp_gcode0;
-   Word32  L_gbk12, L_acc, L_accb;
-   void    Gain_predict( Word16 past_qua_en[], Word16 code[], Word16 L_subfr,
-                        Word16 *gcode0, Word16 *exp_gcode0 );
-   void    Gain_update( Word16 past_qua_en[], Word32 L_gbk12 );
-   void    Gain_update_erasure( Word16 past_qua_en[] );
+   int16_t  index1, index2, tmp;
+   int16_t  gcode0, exp_gcode0;
+   int32_t  L_gbk12, L_acc, L_accb;
+   void    Gain_predict( int16_t past_qua_en[], int16_t code[], int16_t L_subfr,
+                        int16_t *gcode0, int16_t *exp_gcode0 );
+   void    Gain_update( int16_t past_qua_en[], int32_t L_gbk12 );
+   void    Gain_update_erasure( int16_t past_qua_en[] );
 
         /* Gain predictor, Past quantized energies = -14.0 in Q10 */
 
-   static Word16 past_qua_en[4] = { -14336, -14336, -14336, -14336 };
+   static int16_t past_qua_en[4] = { -14336, -14336, -14336, -14336 };
 
 
    /*-------------- Case of erasure. ---------------*/

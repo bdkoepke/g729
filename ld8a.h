@@ -42,19 +42,19 @@
  * Mathematic functions.         *
  *-------------------------------*/
 
-Word32 Inv_sqrt(   /* (o) Q30 : output value   (range: 0<=val<1)           */
-  Word32 L_x       /* (i) Q0  : input value    (range: 0<=val<=7fffffff)   */
+int32_t Inv_sqrt(   /* (o) Q30 : output value   (range: 0<=val<1)           */
+  int32_t L_x       /* (i) Q0  : input value    (range: 0<=val<=7fffffff)   */
 );
 
 void Log2(
-  Word32 L_x,       /* (i) Q0 : input value                                 */
-  Word16 *exponent, /* (o) Q0 : Integer part of Log2.   (range: 0<=val<=30) */
-  Word16 *fraction  /* (o) Q15: Fractionnal part of Log2. (range: 0<=val<1) */
+  int32_t L_x,       /* (i) Q0 : input value                                 */
+  int16_t *exponent, /* (o) Q0 : Integer part of Log2.   (range: 0<=val<=30) */
+  int16_t *fraction  /* (o) Q15: Fractionnal part of Log2. (range: 0<=val<1) */
 );
 
-Word32 Pow2(        /* (o) Q0  : result       (range: 0<=val<=0x7fffffff) */
-  Word16 exponent,  /* (i) Q0  : Integer part.      (range: 0<=val<=30)   */
-  Word16 fraction   /* (i) Q15 : Fractionnal part.  (range: 0.0<=val<1.0) */
+int32_t Pow2(        /* (o) Q0  : result       (range: 0<=val<=0x7fffffff) */
+  int16_t exponent,  /* (i) Q0  : Integer part.      (range: 0<=val<=30)   */
+  int16_t fraction   /* (i) Q15 : Fractionnal part.  (range: 0.0<=val<1.0) */
 );
 
 /*-------------------------------*
@@ -65,13 +65,13 @@ void Init_Pre_Process(void);
 void Init_Post_Process(void);
 
 void Pre_Process(
-  Word16 signal[],   /* Input/output signal */
-  Word16 lg          /* Length of signal    */
+  int16_t signal[],   /* Input/output signal */
+  int16_t lg          /* Length of signal    */
 );
 
 void Post_Process(
- Word16 signal[],   /* Input/output signal */
- Word16 lg          /* Length of signal    */
+ int16_t signal[],   /* Input/output signal */
+ int16_t lg          /* Length of signal    */
 );
 
 /*----------------------------------*
@@ -81,20 +81,20 @@ void Post_Process(
 void Init_Coder_ld8a(void);
 
 void Coder_ld8a(
- Word16 ana[],       /* output  : Analysis parameters */
- Word16 frame,
- Word16 vad_enable
+ int16_t ana[],       /* output  : Analysis parameters */
+ int16_t frame,
+ int16_t vad_enable
 );
 
 void Init_Decod_ld8a(void);
 
 void Decod_ld8a(
-  Word16  parm[],      /* (i)   : vector of synthesis parameters
+  int16_t  parm[],      /* (i)   : vector of synthesis parameters
                                   parm[0] = bad frame indicator (bfi)  */
-  Word16  synth[],     /* (o)   : synthesis speech                     */
-  Word16  A_t[],       /* (o)   : decoded LP filter in 2 subframes     */
-  Word16  *T2,         /* (o)   : decoded pitch lag in 2 subframes     */
-  Word16  *Vad         /* (o)   : VAD                                  */
+  int16_t  synth[],     /* (o)   : synthesis speech                     */
+  int16_t  A_t[],       /* (o)   : decoded LP filter in 2 subframes     */
+  int16_t  *T2,         /* (o)   : decoded pitch lag in 2 subframes     */
+  int16_t  *Vad         /* (o)   : VAD                                  */
 );
 
 /*-------------------------------*
@@ -102,84 +102,84 @@ void Decod_ld8a(
  *-------------------------------*/
 
 void Autocorr(
-  Word16 x[],      /* (i)    : Input signal                      */
-  Word16 m,        /* (i)    : LPC order                         */
-  Word16 r_h[],    /* (o)    : Autocorrelations  (msb)           */
-  Word16 r_l[],    /* (o)    : Autocorrelations  (lsb)           */
-  Word16 *exp_R0
+  int16_t x[],      /* (i)    : Input signal                      */
+  int16_t m,        /* (i)    : LPC order                         */
+  int16_t r_h[],    /* (o)    : Autocorrelations  (msb)           */
+  int16_t r_l[],    /* (o)    : Autocorrelations  (lsb)           */
+  int16_t *exp_R0
 );
 
 void Lag_window(
-  Word16 m,         /* (i)     : LPC order                        */
-  Word16 r_h[],     /* (i/o)   : Autocorrelations  (msb)          */
-  Word16 r_l[]      /* (i/o)   : Autocorrelations  (lsb)          */
+  int16_t m,         /* (i)     : LPC order                        */
+  int16_t r_h[],     /* (i/o)   : Autocorrelations  (msb)          */
+  int16_t r_l[]      /* (i/o)   : Autocorrelations  (lsb)          */
 );
 
 void Levinson(
-  Word16 Rh[],      /* (i)     : Rh[m+1] Vector of autocorrelations (msb) */
-  Word16 Rl[],      /* (i)     : Rl[m+1] Vector of autocorrelations (lsb) */
-  Word16 A[],       /* (o) Q12 : A[m]    LPC coefficients  (m = 10)       */
-  Word16 rc[],      /* (o) Q15 : rc[M]   Relection coefficients.          */
-  Word16 *Err       /* (o)     : Residual energy                          */
+  int16_t Rh[],      /* (i)     : Rh[m+1] Vector of autocorrelations (msb) */
+  int16_t Rl[],      /* (i)     : Rl[m+1] Vector of autocorrelations (lsb) */
+  int16_t A[],       /* (o) Q12 : A[m]    LPC coefficients  (m = 10)       */
+  int16_t rc[],      /* (o) Q15 : rc[M]   Relection coefficients.          */
+  int16_t *Err       /* (o)     : Residual energy                          */
 );
 
 void Az_lsp(
-  Word16 a[],        /* (i) Q12 : predictor coefficients              */
-  Word16 lsp[],      /* (o) Q15 : line spectral pairs                 */
-  Word16 old_lsp[]   /* (i)     : old lsp[] (in case not found 10 roots) */
+  int16_t a[],        /* (i) Q12 : predictor coefficients              */
+  int16_t lsp[],      /* (o) Q15 : line spectral pairs                 */
+  int16_t old_lsp[]   /* (i)     : old lsp[] (in case not found 10 roots) */
 );
 
 void Lsp_Az(
-  Word16 lsp[],    /* (i) Q15 : line spectral frequencies            */
-  Word16 a[]       /* (o) Q12 : predictor coefficients (order = 10)  */
+  int16_t lsp[],    /* (i) Q15 : line spectral frequencies            */
+  int16_t a[]       /* (o) Q12 : predictor coefficients (order = 10)  */
 );
 
 void Lsf_lsp(
-  Word16 lsf[],    /* (i) Q15 : lsf[m] normalized (range: 0.0<=val<=0.5) */
-  Word16 lsp[],    /* (o) Q15 : lsp[m] (range: -1<=val<1)                */
-  Word16 m         /* (i)     : LPC order                                */
+  int16_t lsf[],    /* (i) Q15 : lsf[m] normalized (range: 0.0<=val<=0.5) */
+  int16_t lsp[],    /* (o) Q15 : lsp[m] (range: -1<=val<1)                */
+  int16_t m         /* (i)     : LPC order                                */
 );
 
 void Lsp_lsf(
-  Word16 lsp[],    /* (i) Q15 : lsp[m] (range: -1<=val<1)                */
-  Word16 lsf[],    /* (o) Q15 : lsf[m] normalized (range: 0.0<=val<=0.5) */
-  Word16 m         /* (i)     : LPC order                                */
+  int16_t lsp[],    /* (i) Q15 : lsp[m] (range: -1<=val<1)                */
+  int16_t lsf[],    /* (o) Q15 : lsf[m] normalized (range: 0.0<=val<=0.5) */
+  int16_t m         /* (i)     : LPC order                                */
 );
 
 void Int_qlpc(
- Word16 lsp_old[], /* input : LSP vector of past frame              */
- Word16 lsp_new[], /* input : LSP vector of present frame           */
- Word16 Az[]       /* output: interpolated Az() for the 2 subframes */
+ int16_t lsp_old[], /* input : LSP vector of past frame              */
+ int16_t lsp_new[], /* input : LSP vector of present frame           */
+ int16_t Az[]       /* output: interpolated Az() for the 2 subframes */
 );
 
 void Weight_Az(
-  Word16 a[],      /* (i) Q12 : a[m+1]  LPC coefficients             */
-  Word16 gamma,    /* (i) Q15 : Spectral expansion factor.           */
-  Word16 m,        /* (i)     : LPC order.                           */
-  Word16 ap[]      /* (o) Q12 : Spectral expanded LPC coefficients   */
+  int16_t a[],      /* (i) Q12 : a[m+1]  LPC coefficients             */
+  int16_t gamma,    /* (i) Q15 : Spectral expansion factor.           */
+  int16_t m,        /* (i)     : LPC order.                           */
+  int16_t ap[]      /* (o) Q12 : Spectral expanded LPC coefficients   */
 );
 
 void Residu(
-  Word16 a[],    /* (i) Q12 : prediction coefficients                     */
-  Word16 x[],    /* (i)     : speech (values x[-m..-1] are needed (m=10)  */
-  Word16 y[],    /* (o)     : residual signal                             */
-  Word16 lg      /* (i)     : size of filtering                           */
+  int16_t a[],    /* (i) Q12 : prediction coefficients                     */
+  int16_t x[],    /* (i)     : speech (values x[-m..-1] are needed (m=10)  */
+  int16_t y[],    /* (o)     : residual signal                             */
+  int16_t lg      /* (i)     : size of filtering                           */
 );
 
 void Syn_filt(
-  Word16 a[],     /* (i) Q12 : a[m+1] prediction coefficients   (m=10)  */
-  Word16 x[],     /* (i)     : input signal                             */
-  Word16 y[],     /* (o)     : output signal                            */
-  Word16 lg,      /* (i)     : size of filtering                        */
-  Word16 mem[],   /* (i/o)   : memory associated with this filtering.   */
-  Word16 update   /* (i)     : 0=no update, 1=update of memory.         */
+  int16_t a[],     /* (i) Q12 : a[m+1] prediction coefficients   (m=10)  */
+  int16_t x[],     /* (i)     : input signal                             */
+  int16_t y[],     /* (o)     : output signal                            */
+  int16_t lg,      /* (i)     : size of filtering                        */
+  int16_t mem[],   /* (i/o)   : memory associated with this filtering.   */
+  int16_t update   /* (i)     : 0=no update, 1=update of memory.         */
 );
 
 void Convolve(
-  Word16 x[],      /* (i)     : input vector                           */
-  Word16 h[],      /* (i) Q12 : impulse response                       */
-  Word16 y[],      /* (o)     : output vector                          */
-  Word16 L         /* (i)     : vector size                            */
+  int16_t x[],      /* (i)     : input vector                           */
+  int16_t h[],      /* (i) Q12 : impulse response                       */
+  int16_t y[],      /* (o)     : output vector                          */
+  int16_t L         /* (i)     : vector size                            */
 );
 
 /*--------------------------------------------------------------------------*
@@ -194,75 +194,75 @@ void Convolve(
  * Pitch functions.      *
  *-----------------------*/
 
-Word16 Pitch_ol_fast(  /* output: open loop pitch lag                        */
-   Word16 signal[],    /* input : signal used to compute the open loop pitch */
+int16_t Pitch_ol_fast(  /* output: open loop pitch lag                        */
+   int16_t signal[],    /* input : signal used to compute the open loop pitch */
                        /*     signal[-pit_max] to signal[-1] should be known */
-   Word16   pit_max,   /* input : maximum pitch lag                          */
-   Word16   L_frame    /* input : length of frame to compute pitch           */
+   int16_t   pit_max,   /* input : maximum pitch lag                          */
+   int16_t   L_frame    /* input : length of frame to compute pitch           */
 );
 
-Word16 Pitch_fr3_fast(/* (o)     : pitch period.                          */
-  Word16 exc[],       /* (i)     : excitation buffer                      */
-  Word16 xn[],        /* (i)     : target vector                          */
-  Word16 h[],         /* (i) Q12 : impulse response of filters.           */
-  Word16 L_subfr,     /* (i)     : Length of subframe                     */
-  Word16 t0_min,      /* (i)     : minimum value in the searched range.   */
-  Word16 t0_max,      /* (i)     : maximum value in the searched range.   */
-  Word16 i_subfr,     /* (i)     : indicator for first subframe.          */
-  Word16 *pit_frac    /* (o)     : chosen fraction.                       */
+int16_t Pitch_fr3_fast(/* (o)     : pitch period.                          */
+  int16_t exc[],       /* (i)     : excitation buffer                      */
+  int16_t xn[],        /* (i)     : target vector                          */
+  int16_t h[],         /* (i) Q12 : impulse response of filters.           */
+  int16_t L_subfr,     /* (i)     : Length of subframe                     */
+  int16_t t0_min,      /* (i)     : minimum value in the searched range.   */
+  int16_t t0_max,      /* (i)     : maximum value in the searched range.   */
+  int16_t i_subfr,     /* (i)     : indicator for first subframe.          */
+  int16_t *pit_frac    /* (o)     : chosen fraction.                       */
 );
 
-Word16 G_pitch(      /* (o) Q14 : Gain of pitch lag saturated to 1.2       */
-  Word16 xn[],       /* (i)     : Pitch target.                            */
-  Word16 y1[],       /* (i)     : Filtered adaptive codebook.              */
-  Word16 g_coeff[],  /* (i)     : Correlations need for gain quantization. */
-  Word16 L_subfr     /* (i)     : Length of subframe.                      */
+int16_t G_pitch(      /* (o) Q14 : Gain of pitch lag saturated to 1.2       */
+  int16_t xn[],       /* (i)     : Pitch target.                            */
+  int16_t y1[],       /* (i)     : Filtered adaptive codebook.              */
+  int16_t g_coeff[],  /* (i)     : Correlations need for gain quantization. */
+  int16_t L_subfr     /* (i)     : Length of subframe.                      */
 );
 
-Word16 Enc_lag3(     /* output: Return index of encoding */
-  Word16 T0,         /* input : Pitch delay              */
-  Word16 T0_frac,    /* input : Fractional pitch delay   */
-  Word16 *T0_min,    /* in/out: Minimum search delay     */
-  Word16 *T0_max,    /* in/out: Maximum search delay     */
-  Word16 pit_min,    /* input : Minimum pitch delay      */
-  Word16 pit_max,    /* input : Maximum pitch delay      */
-  Word16 pit_flag    /* input : Flag for 1st subframe    */
+int16_t Enc_lag3(     /* output: Return index of encoding */
+  int16_t T0,         /* input : Pitch delay              */
+  int16_t T0_frac,    /* input : Fractional pitch delay   */
+  int16_t *T0_min,    /* in/out: Minimum search delay     */
+  int16_t *T0_max,    /* in/out: Maximum search delay     */
+  int16_t pit_min,    /* input : Minimum pitch delay      */
+  int16_t pit_max,    /* input : Maximum pitch delay      */
+  int16_t pit_flag    /* input : int32_t for 1st subframe    */
 );
 
 void Dec_lag3(        /* output: return integer pitch lag       */
-  Word16 index,       /* input : received pitch index           */
-  Word16 pit_min,     /* input : minimum pitch lag              */
-  Word16 pit_max,     /* input : maximum pitch lag              */
-  Word16 i_subfr,     /* input : subframe flag                  */
-  Word16 *T0,         /* output: integer part of pitch lag      */
-  Word16 *T0_frac     /* output: fractional part of pitch lag   */
+  int16_t index,       /* input : received pitch index           */
+  int16_t pit_min,     /* input : minimum pitch lag              */
+  int16_t pit_max,     /* input : maximum pitch lag              */
+  int16_t i_subfr,     /* input : subframe flag                  */
+  int16_t *T0,         /* output: integer part of pitch lag      */
+  int16_t *T0_frac     /* output: fractional part of pitch lag   */
 );
 
-Word16 Interpol_3(      /* (o)  : interpolated value  */
-  Word16 *x,            /* (i)  : input vector        */
-  Word16 frac           /* (i)  : fraction            */
+int16_t Interpol_3(      /* (o)  : interpolated value  */
+  int16_t *x,            /* (i)  : input vector        */
+  int16_t frac           /* (i)  : fraction            */
 );
 
 void Pred_lt_3(
-  Word16   exc[],       /* in/out: excitation buffer */
-  Word16   T0,          /* input : integer pitch lag */
-  Word16   frac,        /* input : fraction of lag   */
-  Word16   L_subfr      /* input : subframe size     */
+  int16_t   exc[],       /* in/out: excitation buffer */
+  int16_t   T0,          /* input : integer pitch lag */
+  int16_t   frac,        /* input : fraction of lag   */
+  int16_t   L_subfr      /* input : subframe size     */
 );
 
-Word16 Parity_Pitch(    /* output: parity bit (XOR of 6 MSB bits)    */
-   Word16 pitch_index   /* input : index for which parity to compute */
+int16_t Parity_Pitch(    /* output: parity bit (XOR of 6 MSB bits)    */
+   int16_t pitch_index   /* input : index for which parity to compute */
 );
 
-Word16  Check_Parity_Pitch( /* output: 0 = no error, 1= error */
-  Word16 pitch_index,       /* input : index of parameter     */
-  Word16 parity             /* input : parity bit             */
+int16_t  Check_Parity_Pitch( /* output: 0 = no error, 1= error */
+  int16_t pitch_index,       /* input : index of parameter     */
+  int16_t parity             /* input : parity bit             */
 );
 
 void Cor_h_X(
-     Word16 h[],        /* (i) Q12 :Impulse response of filters      */
-     Word16 X[],        /* (i)     :Target vector                    */
-     Word16 D[]         /* (o)     :Correlations between h[] and D[] */
+     int16_t h[],        /* (i) Q12 :Impulse response of filters      */
+     int16_t X[],        /* (i)     :Target vector                    */
+     int16_t D[]         /* (o)     :Correlations between h[] and D[] */
                         /*          Normalized to 13 bits            */
 );
 
@@ -278,25 +278,25 @@ void Cor_h_X(
 /* The following constants are Q15 fractions.
    These fractions is used to keep maximum precision on "alp" sum */
 
-#define _1_2    (Word16)(16384)
-#define _1_4    (Word16)( 8192)
-#define _1_8    (Word16)( 4096)
-#define _1_16   (Word16)( 2048)
+#define _1_2    (int16_t)(16384)
+#define _1_4    (int16_t)( 8192)
+#define _1_8    (int16_t)( 4096)
+#define _1_16   (int16_t)( 2048)
 
-Word16  ACELP_Code_A(    /* (o)     :index of pulses positions    */
-  Word16 x[],            /* (i)     :Target vector                */
-  Word16 h[],            /* (i) Q12 :Inpulse response of filters  */
-  Word16 T0,             /* (i)     :Pitch lag                    */
-  Word16 pitch_sharp,    /* (i) Q14 :Last quantized pitch gain    */
-  Word16 code[],         /* (o) Q13 :Innovative codebook          */
-  Word16 y[],            /* (o) Q12 :Filtered innovative codebook */
-  Word16 *sign           /* (o)     :Signs of 4 pulses            */
+int16_t  ACELP_Code_A(    /* (o)     :index of pulses positions    */
+  int16_t x[],            /* (i)     :Target vector                */
+  int16_t h[],            /* (i) Q12 :Inpulse response of filters  */
+  int16_t T0,             /* (i)     :Pitch lag                    */
+  int16_t pitch_sharp,    /* (i) Q14 :Last quantized pitch gain    */
+  int16_t code[],         /* (o) Q13 :Innovative codebook          */
+  int16_t y[],            /* (o) Q12 :Filtered innovative codebook */
+  int16_t *sign           /* (o)     :Signs of 4 pulses            */
 );
 
 void Decod_ACELP(
-  Word16 sign,      /* (i)     : signs of 4 pulses.                       */
-  Word16 index,     /* (i)     : Positions of the 4 pulses.               */
-  Word16 cod[]      /* (o) Q13 : algebraic (fixed) codebook excitation    */
+  int16_t sign,      /* (i)     : signs of 4 pulses.                       */
+  int16_t index,     /* (i)     : Positions of the 4 pulses.               */
+  int16_t cod[]      /* (o) Q13 : algebraic (fixed) codebook excitation    */
 );
 /*--------------------------------------------------------------------------*
  *       LSP constant parameters                                            *
@@ -318,36 +318,36 @@ void Decod_ACELP(
 #define   GAP3          321    /* Q13 */
 #define GRID_POINTS     50
 
-#define PI04      ((Word16)1029)        /* Q13  pi*0.04 */
-#define PI92      ((Word16)23677)       /* Q13  pi*0.92 */
-#define CONST10   ((Word16)10*(1<<11))  /* Q11  10.0 */
-#define CONST12   ((Word16)19661)       /* Q14  1.2 */
+#define PI04      ((int16_t)1029)        /* Q13  pi*0.04 */
+#define PI92      ((int16_t)23677)       /* Q13  pi*0.92 */
+#define CONST10   ((int16_t)10*(1<<11))  /* Q11  10.0 */
+#define CONST12   ((int16_t)19661)       /* Q14  1.2 */
 
 /*-------------------------------*
  * LSP VQ functions.             *
  *-------------------------------*/
 
 void Lsf_lsp2(
-  Word16 lsf[],    /* (i) Q13 : lsf[m] (range: 0.0<=val<PI) */
-  Word16 lsp[],    /* (o) Q15 : lsp[m] (range: -1<=val<1)   */
-  Word16 m         /* (i)     : LPC order                   */
+  int16_t lsf[],    /* (i) Q13 : lsf[m] (range: 0.0<=val<PI) */
+  int16_t lsp[],    /* (o) Q15 : lsp[m] (range: -1<=val<1)   */
+  int16_t m         /* (i)     : LPC order                   */
 );
 
 void Lsp_lsf2(
-  Word16 lsp[],    /* (i) Q15 : lsp[m] (range: -1<=val<1)   */
-  Word16 lsf[],    /* (o) Q13 : lsf[m] (range: 0.0<=val<PI) */
-  Word16 m         /* (i)     : LPC order                   */
+  int16_t lsp[],    /* (i) Q15 : lsp[m] (range: -1<=val<1)   */
+  int16_t lsf[],    /* (o) Q13 : lsf[m] (range: 0.0<=val<PI) */
+  int16_t m         /* (i)     : LPC order                   */
 );
 
 void Qua_lsp(
-  Word16 lsp[],       /* (i) Q15 : Unquantized LSP            */
-  Word16 lsp_q[],     /* (o) Q15 : Quantized LSP              */
-  Word16 ana[]        /* (o)     : indexes                    */
+  int16_t lsp[],       /* (i) Q15 : Unquantized LSP            */
+  int16_t lsp_q[],     /* (o) Q15 : Quantized LSP              */
+  int16_t ana[]        /* (o)     : indexes                    */
 );
 
 void Get_wegt(
-  Word16 flsp[],    /* Q13 */
-  Word16 wegt[]     /* Q11 -> normalized */
+  int16_t flsp[],    /* Q13 */
+  int16_t wegt[]     /* Q11 -> normalized */
 );
 
 void Lsp_encw_reset(
@@ -355,94 +355,94 @@ void Lsp_encw_reset(
 );
 
 void Lsp_qua_cs(
-  Word16 flsp_in[M],    /* Q13 */
-  Word16 lspq_out[M],   /* Q13 */
-  Word16 *code
+  int16_t flsp_in[M],    /* Q13 */
+  int16_t lspq_out[M],   /* Q13 */
+  int16_t *code
 );
 
 void Lsp_expand_1(
-  Word16 buf[],          /* Q13 */
-  Word16 gap             /* Q13 */
+  int16_t buf[],          /* Q13 */
+  int16_t gap             /* Q13 */
 );
 
 void Lsp_expand_2(
-  Word16 buf[],         /* Q13 */
-  Word16 gap            /* Q13 */
+  int16_t buf[],         /* Q13 */
+  int16_t gap            /* Q13 */
 );
 
 void Lsp_expand_1_2(
-  Word16 buf[],         /* Q13 */
-  Word16 gap            /* Q13 */
+  int16_t buf[],         /* Q13 */
+  int16_t gap            /* Q13 */
 );
 
 void Lsp_get_quant(
-  Word16 lspcb1[][M],      /* Q13 */
-  Word16 lspcb2[][M],      /* Q13 */
-  Word16 code0,
-  Word16 code1,
-  Word16 code2,
-  Word16 fg[][M],            /* Q15 */
-  Word16 freq_prev[][M],     /* Q13 */
-  Word16 lspq[],                /* Q13 */
-  Word16 fg_sum[]               /* Q15 */
+  int16_t lspcb1[][M],      /* Q13 */
+  int16_t lspcb2[][M],      /* Q13 */
+  int16_t code0,
+  int16_t code1,
+  int16_t code2,
+  int16_t fg[][M],            /* Q15 */
+  int16_t freq_prev[][M],     /* Q13 */
+  int16_t lspq[],                /* Q13 */
+  int16_t fg_sum[]               /* Q15 */
 );
 
 void Lsp_get_tdist(
-  Word16 wegt[],        /* normalized */
-  Word16 buf[],         /* Q13 */
-  Word32 *L_tdist,      /* Q27 */
-  Word16 rbuf[],        /* Q13 */
-  Word16 fg_sum[]       /* Q15 */
+  int16_t wegt[],        /* normalized */
+  int16_t buf[],         /* Q13 */
+  int32_t *L_tdist,      /* Q27 */
+  int16_t rbuf[],        /* Q13 */
+  int16_t fg_sum[]       /* Q15 */
 );
 
 void Lsp_last_select(
-  Word32 L_tdist[],     /* Q27 */
-  Word16 *mode_index
+  int32_t L_tdist[],     /* Q27 */
+  int16_t *mode_index
 );
 
 void Lsp_pre_select(
-  Word16 rbuf[],              /* Q13 */
-  Word16 lspcb1[][M],      /* Q13 */
-  Word16 *cand
+  int16_t rbuf[],              /* Q13 */
+  int16_t lspcb1[][M],      /* Q13 */
+  int16_t *cand
 );
 
 void Lsp_select_1(
-  Word16 rbuf[],              /* Q13 */
-  Word16 lspcb1[],            /* Q13 */
-  Word16 wegt[],              /* normalized */
-  Word16 lspcb2[][M],      /* Q13 */
-  Word16 *index
+  int16_t rbuf[],              /* Q13 */
+  int16_t lspcb1[],            /* Q13 */
+  int16_t wegt[],              /* normalized */
+  int16_t lspcb2[][M],      /* Q13 */
+  int16_t *index
 );
 
 void Lsp_select_2(
-  Word16 rbuf[],              /* Q13 */
-  Word16 lspcb1[],            /* Q13 */
-  Word16 wegt[],              /* normalized */
-  Word16 lspcb2[][M],      /* Q13 */
-  Word16 *index
+  int16_t rbuf[],              /* Q13 */
+  int16_t lspcb1[],            /* Q13 */
+  int16_t wegt[],              /* normalized */
+  int16_t lspcb2[][M],      /* Q13 */
+  int16_t *index
 );
 
 void Lsp_stability(
-  Word16 buf[]     /* Q13 */
+  int16_t buf[]     /* Q13 */
 );
 
 void Relspwed(
-  Word16 lsp[],                          /* Q13 */
-  Word16 wegt[],                         /* normalized */
-  Word16 lspq[],                         /* Q13 */
-  Word16 lspcb1[][M],                 /* Q13 */
-  Word16 lspcb2[][M],                 /* Q13 */
-  Word16 fg[MODE][MA_NP][M],          /* Q15 */
-  Word16 freq_prev[MA_NP][M],         /* Q13 */
-  Word16 fg_sum[MODE][M],             /* Q15 */
-  Word16 fg_sum_inv[MODE][M],         /* Q12 */
-  Word16 code_ana[]
+  int16_t lsp[],                          /* Q13 */
+  int16_t wegt[],                         /* normalized */
+  int16_t lspq[],                         /* Q13 */
+  int16_t lspcb1[][M],                 /* Q13 */
+  int16_t lspcb2[][M],                 /* Q13 */
+  int16_t fg[MODE][MA_NP][M],          /* Q15 */
+  int16_t freq_prev[MA_NP][M],         /* Q13 */
+  int16_t fg_sum[MODE][M],             /* Q15 */
+  int16_t fg_sum_inv[MODE][M],         /* Q12 */
+  int16_t code_ana[]
 );
 
 void D_lsp(
-  Word16 prm[],          /* (i)     : indexes of the selected LSP */
-  Word16 lsp_q[],        /* (o) Q15 : Quantized LSP parameters    */
-  Word16 erase           /* (i)     : frame erase information     */
+  int16_t prm[],          /* (i)     : indexes of the selected LSP */
+  int16_t lsp_q[],        /* (o) Q15 : Quantized LSP parameters    */
+  int16_t erase           /* (i)     : frame erase information     */
 );
 
 void Lsp_decw_reset(
@@ -450,30 +450,30 @@ void Lsp_decw_reset(
 );
 
 void Lsp_iqua_cs(
- Word16 prm[],          /* input : codes of the selected LSP*/
- Word16 lsp_q[],        /* output: Quantized LSP parameters*/
- Word16 erase           /* input : frame erase information */
+ int16_t prm[],          /* input : codes of the selected LSP*/
+ int16_t lsp_q[],        /* output: Quantized LSP parameters*/
+ int16_t erase           /* input : frame erase information */
 );
 
 void Lsp_prev_compose(
-  Word16 lsp_ele[],             /* Q13 */
-  Word16 lsp[],                 /* Q13 */
-  Word16 fg[][M],            /* Q15 */
-  Word16 freq_prev[][M],     /* Q13 */
-  Word16 fg_sum[]               /* Q15 */
+  int16_t lsp_ele[],             /* Q13 */
+  int16_t lsp[],                 /* Q13 */
+  int16_t fg[][M],            /* Q15 */
+  int16_t freq_prev[][M],     /* Q13 */
+  int16_t fg_sum[]               /* Q15 */
 );
 
 void Lsp_prev_extract(
-  Word16 lsp[M],                 /* Q13 */
-  Word16 lsp_ele[M],             /* Q13 */
-  Word16 fg[MA_NP][M],           /* Q15 */
-  Word16 freq_prev[MA_NP][M],    /* Q13 */
-  Word16 fg_sum_inv[M]           /* Q12 */
+  int16_t lsp[M],                 /* Q13 */
+  int16_t lsp_ele[M],             /* Q13 */
+  int16_t fg[MA_NP][M],           /* Q15 */
+  int16_t freq_prev[MA_NP][M],    /* Q13 */
+  int16_t fg_sum_inv[M]           /* Q12 */
 );
 
 void Lsp_prev_update(
-  Word16 lsp_ele[M],             /* Q13 */
-  Word16 freq_prev[MA_NP][M]     /* Q13 */
+  int16_t lsp_ele[M],             /* Q13 */
+  int16_t freq_prev[MA_NP][M]     /* Q13 */
 );
 
 /*-------------------------------*
@@ -492,57 +492,57 @@ void Lsp_prev_update(
  * gain VQ functions.                                                       *
  *--------------------------------------------------------------------------*/
 
-Word16 Qua_gain(
-  Word16 code[],    /* (i) Q13 : Innovative vector.                         */
-  Word16 g_coeff[], /* (i)     : Correlations <xn y1> -2<y1 y1>             */
+int16_t Qua_gain(
+  int16_t code[],    /* (i) Q13 : Innovative vector.                         */
+  int16_t g_coeff[], /* (i)     : Correlations <xn y1> -2<y1 y1>             */
                     /*            <y2,y2>, -2<xn,y2>, 2<y1,y2>              */
-  Word16 exp_coeff[],/* (i)    : Q-Format g_coeff[]                         */
-  Word16 L_subfr,   /* (i)     : Subframe length.                           */
-  Word16 *gain_pit, /* (o) Q14 : Pitch gain.                                */
-  Word16 *gain_cod, /* (o) Q1  : Code gain.                                 */
-  Word16 tameflag   /* (i)     : flag set to 1 if taming is needed          */
+  int16_t exp_coeff[],/* (i)    : Q-Format g_coeff[]                         */
+  int16_t L_subfr,   /* (i)     : Subframe length.                           */
+  int16_t *gain_pit, /* (o) Q14 : Pitch gain.                                */
+  int16_t *gain_cod, /* (o) Q1  : Code gain.                                 */
+  int16_t tameflag   /* (i)     : flag set to 1 if taming is needed          */
 );
 
 void Dec_gain(
-  Word16 index,     /* (i)     : Index of quantization.                     */
-  Word16 code[],    /* (i) Q13 : Innovative vector.                         */
-  Word16 L_subfr,   /* (i)     : Subframe length.                           */
-  Word16 bfi,       /* (i)     : Bad frame indicator                        */
-  Word16 *gain_pit, /* (o) Q14 : Pitch gain.                                */
-  Word16 *gain_cod  /* (o) Q1  : Code gain.                                 */
+  int16_t index,     /* (i)     : Index of quantization.                     */
+  int16_t code[],    /* (i) Q13 : Innovative vector.                         */
+  int16_t L_subfr,   /* (i)     : Subframe length.                           */
+  int16_t bfi,       /* (i)     : Bad frame indicator                        */
+  int16_t *gain_pit, /* (o) Q14 : Pitch gain.                                */
+  int16_t *gain_cod  /* (o) Q1  : Code gain.                                 */
 );
 
 void Gain_predict(
-  Word16 past_qua_en[],/* (i) Q10 :Past quantized energies                  */
-  Word16 code[],    /* (i) Q13 : Innovative vector.                         */
-  Word16 L_subfr,   /* (i)     : Subframe length.                           */
-  Word16 *gcode0,   /* (o) Qxx : Predicted codebook gain                    */
-  Word16 *exp_gcode0 /* (o)    : Q-Format(gcode0)                           */
+  int16_t past_qua_en[],/* (i) Q10 :Past quantized energies                  */
+  int16_t code[],    /* (i) Q13 : Innovative vector.                         */
+  int16_t L_subfr,   /* (i)     : Subframe length.                           */
+  int16_t *gcode0,   /* (o) Qxx : Predicted codebook gain                    */
+  int16_t *exp_gcode0 /* (o)    : Q-Format(gcode0)                           */
 );
 
 void Gain_update(
-  Word16 past_qua_en[],/* (i) Q10 :Past quantized energies                  */
-  Word32 L_gbk12    /* (i) Q13 : gbk1[indice1][1]+gbk2[indice2][1]          */
+  int16_t past_qua_en[],/* (i) Q10 :Past quantized energies                  */
+  int32_t L_gbk12    /* (i) Q13 : gbk1[indice1][1]+gbk2[indice2][1]          */
 );
 
 void Gain_update_erasure(
-  Word16 past_qua_en[]/* (i) Q10 :Past quantized energies                   */
+  int16_t past_qua_en[]/* (i) Q10 :Past quantized energies                   */
 );
 
 void Corr_xy2(
-      Word16 xn[],           /* (i) Q0  :Target vector.                  */
-      Word16 y1[],           /* (i) Q0  :Adaptive codebook.              */
-      Word16 y2[],           /* (i) Q12 :Filtered innovative vector.     */
-      Word16 g_coeff[],      /* (o) Q[exp]:Correlations between xn,y1,y2 */
-      Word16 exp_g_coeff[]   /* (o)       :Q-format of g_coeff[]         */
+      int16_t xn[],           /* (i) Q0  :Target vector.                  */
+      int16_t y1[],           /* (i) Q0  :Adaptive codebook.              */
+      int16_t y2[],           /* (i) Q12 :Filtered innovative vector.     */
+      int16_t g_coeff[],      /* (o) Q[exp]:Correlations between xn,y1,y2 */
+      int16_t exp_g_coeff[]   /* (o)       :Q-format of g_coeff[]         */
 );
 
 /*-----------------------*
  * Bitstream function    *
  *-----------------------*/
 
-void  prm2bits_ld8k(Word16 prm[], Word16 bits[]);
-void  bits2prm_ld8k(Word16 bits[], Word16 prm[]);
+void  prm2bits_ld8k(int16_t prm[], int16_t bits[]);
+void  bits2prm_ld8k(int16_t bits[], int16_t prm[]);
 #define BIT_0     (short)0x007f /* definition of zero-bit in bit-stream      */
 #define BIT_1     (short)0x0081 /* definition of one-bit in bit-stream       */
 #define SYNC_WORD (short)0x6b21 /* definition of frame erasure flag          */
@@ -564,37 +564,37 @@ void  bits2prm_ld8k(Word16 bits[], Word16 prm[]);
 
 #define  MU       26214   /* Factor for tilt compensation filter   0.8  Q15 */
 #define  AGC_FAC  29491   /* Factor for automatic gain control     0.9  Q15 */
-#define  AGC_FAC1 (Word16)(32767 - AGC_FAC)    /* 1-AGC_FAC in Q15          */
+#define  AGC_FAC1 (int16_t)(32767 - AGC_FAC)    /* 1-AGC_FAC in Q15          */
 
 
 void Init_Post_Filter(void);
 
 void Post_Filter(
-  Word16 *syn,       /* in/out: synthesis speech (postfiltered is output)    */
-  Word16 *Az_4,       /* input : interpolated LPC parameters in all subframes */
-  Word16 *T,           /* input : decoded pitch lags in all subframes          */
-  Word16 Vad 
+  int16_t *syn,       /* in/out: synthesis speech (postfiltered is output)    */
+  int16_t *Az_4,       /* input : interpolated LPC parameters in all subframes */
+  int16_t *T,           /* input : decoded pitch lags in all subframes          */
+  int16_t Vad 
 );
 
 void pit_pst_filt(
-  Word16 *signal,      /* (i)     : input signal                        */
-  Word16 *scal_sig,    /* (i)     : input signal (scaled, divided by 4) */
-  Word16 t0_min,       /* (i)     : minimum value in the searched range */
-  Word16 t0_max,       /* (i)     : maximum value in the searched range */
-  Word16 L_subfr,      /* (i)     : size of filtering                   */
-  Word16 *signal_pst   /* (o)     : harmonically postfiltered signal    */
+  int16_t *signal,      /* (i)     : input signal                        */
+  int16_t *scal_sig,    /* (i)     : input signal (scaled, divided by 4) */
+  int16_t t0_min,       /* (i)     : minimum value in the searched range */
+  int16_t t0_max,       /* (i)     : maximum value in the searched range */
+  int16_t L_subfr,      /* (i)     : size of filtering                   */
+  int16_t *signal_pst   /* (o)     : harmonically postfiltered signal    */
 );
 
 void preemphasis(
-  Word16 *signal,  /* (i/o)   : input signal overwritten by the output */
-  Word16 g,        /* (i) Q15 : preemphasis coefficient                */
-  Word16 L         /* (i)     : size of filtering                      */
+  int16_t *signal,  /* (i/o)   : input signal overwritten by the output */
+  int16_t g,        /* (i) Q15 : preemphasis coefficient                */
+  int16_t L         /* (i)     : size of filtering                      */
 );
 
 void agc(
-  Word16 *sig_in,   /* (i)     : postfilter input signal  */
-  Word16 *sig_out,  /* (i/o)   : postfilter output signal */
-  Word16 l_trm      /* (i)     : subframe size            */
+  int16_t *sig_in,   /* (i)     : postfilter input signal  */
+  int16_t *sig_out,  /* (i/o)   : postfilter output signal */
+  int16_t l_trm      /* (i)     : subframe size            */
 );
 
 /*--------------------------------------------------------------------------*
@@ -607,23 +607,23 @@ void agc(
 #define L_THRESH_ERR 983040000L /* Error threshold taming 16384. * 60000.   */
 
 void   Init_exc_err(void);
-void   update_exc_err(Word16 gain_pit, Word16 t0);
-Word16 test_err(Word16 t0, Word16 t0_frac);
+void   update_exc_err(int16_t gain_pit, int16_t t0);
+int16_t test_err(int16_t t0, int16_t t0_frac);
 
 /*--------------------------------------------------------------------------*
  * Prototypes for auxiliary functions.                                      *
  *--------------------------------------------------------------------------*/
 
 void Copy(
-  Word16 x[],      /* (i)   : input vector   */
-  Word16 y[],      /* (o)   : output vector  */
-  Word16 L         /* (i)   : vector length  */
+  int16_t x[],      /* (i)   : input vector   */
+  int16_t y[],      /* (o)   : output vector  */
+  int16_t L         /* (i)   : vector length  */
 );
 
 void Set_zero(
-  Word16 x[],       /* (o)    : vector to clear     */
-  Word16 L          /* (i)    : length of vector    */
+  int16_t x[],       /* (o)    : vector to clear     */
+  int16_t L          /* (i)    : length of vector    */
 );
 
-Word16 Random(Word16 *seed);
+int16_t Random(int16_t *seed);
 

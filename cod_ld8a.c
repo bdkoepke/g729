@@ -17,7 +17,7 @@
  *   ->Initialization of variables for the coder section.          *
  *                                                                 *
  *                                                                 *
- *  Coder_ld8a(Word16 ana[]);                                      *
+ *  Coder_ld8a(int16_t ana[]);                                      *
  *                                                                 *
  *   ->Main coder function.                                        *
  *                                                                 *
@@ -63,36 +63,36 @@
 
         /* Speech vector */
 
- static Word16 old_speech[L_TOTAL];
- static Word16 *speech, *p_window;
- Word16 *new_speech;                    /* Global variable */
+ static int16_t old_speech[L_TOTAL];
+ static int16_t *speech, *p_window;
+ int16_t *new_speech;                    /* Global variable */
 
         /* Weighted speech vector */
 
- static Word16 old_wsp[L_FRAME+PIT_MAX];
- static Word16 *wsp;
+ static int16_t old_wsp[L_FRAME+PIT_MAX];
+ static int16_t *wsp;
 
         /* Excitation vector */
 
- static Word16 old_exc[L_FRAME+PIT_MAX+L_INTERPOL];
- static Word16 *exc;
+ static int16_t old_exc[L_FRAME+PIT_MAX+L_INTERPOL];
+ static int16_t *exc;
 
         /* Lsp (Line spectral pairs) */
 
- static Word16 lsp_old[M]={
+ static int16_t lsp_old[M]={
               30000, 26000, 21000, 15000, 8000, 0, -8000,-15000,-21000,-26000};
- static Word16 lsp_old_q[M];
+ static int16_t lsp_old_q[M];
 
         /* Filter's memory */
 
- static Word16  mem_w0[M], mem_w[M], mem_zero[M];
- static Word16  sharp;
+ static int16_t  mem_w0[M], mem_w[M], mem_zero[M];
+ static int16_t  sharp;
 
         /* For G.729B */
         /* DTX variables */
- static Word16 pastVad;   
- static Word16 ppastVad;
- static Word16 seed;
+ static int16_t pastVad;   
+ static int16_t ppastVad;
+ static int16_t seed;
 
 /*-----------------------------------------------------------------*
  *   Function  Init_Coder_ld8a                                     *
@@ -165,7 +165,7 @@ void Init_Coder_ld8a(void)
 /*-----------------------------------------------------------------*
  *   Functions Coder_ld8a                                          *
  *            ~~~~~~~~~~                                           *
- *  Coder_ld8a(Word16 ana[]);                                      *
+ *  Coder_ld8a(int16_t ana[]);                                      *
  *                                                                 *
  *   ->Main coder function.                                        *
  *                                                                 *
@@ -182,40 +182,40 @@ void Init_Coder_ld8a(void)
  *-----------------------------------------------------------------*/
 
 void Coder_ld8a(
-     Word16 ana[],       /* output  : Analysis parameters */
-     Word16 frame,       /* input   : frame counter       */
-     Word16 vad_enable   /* input   : VAD enable flag     */
+     int16_t ana[],       /* output  : Analysis parameters */
+     int16_t frame,       /* input   : frame counter       */
+     int16_t vad_enable   /* input   : VAD enable flag     */
 )
 {
 
   /* LPC analysis */
 
-  Word16 Aq_t[(MP1)*2];         /* A(z)   quantized for the 2 subframes */
-  Word16 Ap_t[(MP1)*2];         /* A(z/gamma)       for the 2 subframes */
-  Word16 *Aq, *Ap;              /* Pointer on Aq_t and Ap_t             */
+  int16_t Aq_t[(MP1)*2];         /* A(z)   quantized for the 2 subframes */
+  int16_t Ap_t[(MP1)*2];         /* A(z/gamma)       for the 2 subframes */
+  int16_t *Aq, *Ap;              /* Pointer on Aq_t and Ap_t             */
 
   /* Other vectors */
 
-  Word16 h1[L_SUBFR];            /* Impulse response h1[]              */
-  Word16 xn[L_SUBFR];            /* Target vector for pitch search     */
-  Word16 xn2[L_SUBFR];           /* Target vector for codebook search  */
-  Word16 code[L_SUBFR];          /* Fixed codebook excitation          */
-  Word16 y1[L_SUBFR];            /* Filtered adaptive excitation       */
-  Word16 y2[L_SUBFR];            /* Filtered fixed codebook excitation */
-  Word16 g_coeff[4];             /* Correlations between xn & y1       */
+  int16_t h1[L_SUBFR];            /* Impulse response h1[]              */
+  int16_t xn[L_SUBFR];            /* Target vector for pitch search     */
+  int16_t xn2[L_SUBFR];           /* Target vector for codebook search  */
+  int16_t code[L_SUBFR];          /* Fixed codebook excitation          */
+  int16_t y1[L_SUBFR];            /* Filtered adaptive excitation       */
+  int16_t y2[L_SUBFR];            /* Filtered fixed codebook excitation */
+  int16_t g_coeff[4];             /* Correlations between xn & y1       */
 
-  Word16 g_coeff_cs[5];
-  Word16 exp_g_coeff_cs[5];      /* Correlations between xn, y1, & y2
+  int16_t g_coeff_cs[5];
+  int16_t exp_g_coeff_cs[5];      /* Correlations between xn, y1, & y2
                                      <y1,y1>, -2<xn,y1>,
                                           <y2,y2>, -2<xn,y2>, 2<y1,y2> */
 
   /* Scalars */
 
-  Word16 i, j, k, i_subfr;
-  Word16 T_op, T0, T0_min, T0_max, T0_frac;
-  Word16 gain_pit, gain_code, index;
-  Word16 temp, taming;
-  Word32 L_temp;
+  int16_t i, j, k, i_subfr;
+  int16_t T_op, T0, T0_min, T0_max, T0_frac;
+  int16_t gain_pit, gain_code, index;
+  int16_t temp, taming;
+  int32_t L_temp;
 
 /*------------------------------------------------------------------------*
  *  - Perform LPC analysis:                                               *
@@ -228,15 +228,15 @@ void Coder_ld8a(
  *------------------------------------------------------------------------*/
   {
      /* Temporary vectors */
-    Word16 r_l[NP+1], r_h[NP+1];     /* Autocorrelations low and hi          */
-    Word16 rc[M];                    /* Reflection coefficients.             */
-    Word16 lsp_new[M], lsp_new_q[M]; /* LSPs at 2th subframe                 */
+    int16_t r_l[NP+1], r_h[NP+1];     /* Autocorrelations low and hi          */
+    int16_t rc[M];                    /* Reflection coefficients.             */
+    int16_t lsp_new[M], lsp_new_q[M]; /* LSPs at 2th subframe                 */
 
     /* For G.729B */
-    Word16 rh_nbe[MP1];             
-    Word16 lsf_new[M];
-    Word16 lsfq_mem[MA_NP][M];
-    Word16 exp_R0, Vad;
+    int16_t rh_nbe[MP1];             
+    int16_t lsf_new[M];
+    int16_t lsfq_mem[MA_NP][M];
+    int16_t exp_R0, Vad;
 
     /* LP analysis */
     Autocorr(p_window, NP, r_h, r_l, &exp_R0);     /* Autocorrelations */
@@ -344,7 +344,7 @@ void Coder_ld8a(
   Residu(&Aq_t[MP1], &speech[L_SUBFR], &exc[L_SUBFR], L_SUBFR);
 
   {
-    Word16 Ap1[MP1];
+    int16_t Ap1[MP1];
 
     Ap = Ap_t;
     Ap1[0] = 4096;

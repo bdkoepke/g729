@@ -15,11 +15,11 @@
 #include "tab_ld8a.h"
 
 static void Gbk_presel(
-   Word16 best_gain[],     /* (i) [0] Q9 : unquantized pitch gain     */
+   int16_t best_gain[],     /* (i) [0] Q9 : unquantized pitch gain     */
                            /* (i) [1] Q2 : unquantized code gain      */
-   Word16 *cand1,          /* (o)    : index of best 1st stage vector */
-   Word16 *cand2,          /* (o)    : index of best 2nd stage vector */
-   Word16 gcode0           /* (i) Q4 : presearch for gain codebook    */
+   int16_t *cand1,          /* (o)    : index of best 1st stage vector */
+   int16_t *cand2,          /* (o)    : index of best 2nd stage vector */
+   int16_t gcode0           /* (i) Q4 : presearch for gain codebook    */
 );
 
 
@@ -39,32 +39,32 @@ static void Gbk_presel(
  *   Index of quantization.                                                  *
  *                                                                           *
  *--------------------------------------------------------------------------*/
-Word16 Qua_gain(
-   Word16 code[],       /* (i) Q13 :Innovative vector.             */
-   Word16 g_coeff[],    /* (i)     :Correlations <xn y1> -2<y1 y1> */
+int16_t Qua_gain(
+   int16_t code[],       /* (i) Q13 :Innovative vector.             */
+   int16_t g_coeff[],    /* (i)     :Correlations <xn y1> -2<y1 y1> */
                         /*            <y2,y2>, -2<xn,y2>, 2<y1,y2> */
-   Word16 exp_coeff[],  /* (i)     :Q-Format g_coeff[]             */
-   Word16 L_subfr,      /* (i)     :Subframe length.               */
-   Word16 *gain_pit,    /* (o) Q14 :Pitch gain.                    */
-   Word16 *gain_cod,    /* (o) Q1  :Code gain.                     */
-   Word16 tameflag      /* (i)     : set to 1 if taming is needed  */
+   int16_t exp_coeff[],  /* (i)     :Q-Format g_coeff[]             */
+   int16_t L_subfr,      /* (i)     :Subframe length.               */
+   int16_t *gain_pit,    /* (o) Q14 :Pitch gain.                    */
+   int16_t *gain_cod,    /* (o) Q1  :Code gain.                     */
+   int16_t tameflag      /* (i)     : set to 1 if taming is needed  */
 )
 {
-   Word16  i, j, index1, index2;
-   Word16  cand1, cand2;
-   Word16  exp, gcode0, exp_gcode0, gcode0_org, e_min ;
-   Word16  nume, denom, inv_denom;
-   Word16  exp1,exp2,exp_nume,exp_denom,exp_inv_denom,sft,tmp;
-   Word16  g_pitch, g2_pitch, g_code, g2_code, g_pit_cod;
-   Word16  coeff[5], coeff_lsf[5];
-   Word16  exp_min[5];
-   Word32  L_gbk12;
-   Word32  L_tmp, L_dist_min, L_temp, L_tmp1, L_tmp2, L_acc, L_accb;
-   Word16  best_gain[2];
+   int16_t  i, j, index1, index2;
+   int16_t  cand1, cand2;
+   int16_t  exp, gcode0, exp_gcode0, gcode0_org, e_min ;
+   int16_t  nume, denom, inv_denom;
+   int16_t  exp1,exp2,exp_nume,exp_denom,exp_inv_denom,sft,tmp;
+   int16_t  g_pitch, g2_pitch, g_code, g2_code, g_pit_cod;
+   int16_t  coeff[5], coeff_lsf[5];
+   int16_t  exp_min[5];
+   int32_t  L_gbk12;
+   int32_t  L_tmp, L_dist_min, L_temp, L_tmp1, L_tmp2, L_acc, L_accb;
+   int16_t  best_gain[2];
 
         /* Gain predictor, Past quantized energies = -14.0 in Q10 */
 
- static Word16 past_qua_en[4] = { -14336, -14336, -14336, -14336 };
+ static int16_t past_qua_en[4] = { -14336, -14336, -14336, -14336 };
 
   /*---------------------------------------------------*
    *-  energy due to innovation                       -*
@@ -334,7 +334,7 @@ else{
    *----------------------------------------------*/
    Gain_update( past_qua_en, L_gbk12 );
 
-   return( add( map1[index1]*(Word16)NCODE2, map2[index2] ) );
+   return( add( map1[index1]*(int16_t)NCODE2, map2[index2] ) );
 
 }
 /*---------------------------------------------------------------------------*
@@ -343,17 +343,17 @@ else{
  *   - presearch for gain codebook -                                         *
  *---------------------------------------------------------------------------*/
 static void Gbk_presel(
-   Word16 best_gain[],     /* (i) [0] Q9 : unquantized pitch gain     */
+   int16_t best_gain[],     /* (i) [0] Q9 : unquantized pitch gain     */
                            /* (i) [1] Q2 : unquantized code gain      */
-   Word16 *cand1,          /* (o)    : index of best 1st stage vector */
-   Word16 *cand2,          /* (o)    : index of best 2nd stage vector */
-   Word16 gcode0           /* (i) Q4 : presearch for gain codebook    */
+   int16_t *cand1,          /* (o)    : index of best 1st stage vector */
+   int16_t *cand2,          /* (o)    : index of best 2nd stage vector */
+   int16_t gcode0           /* (i) Q4 : presearch for gain codebook    */
 )
 {
-   Word16    acc_h;
-   Word16    sft_x,sft_y;
-   Word32    L_acc,L_preg,L_cfbg,L_tmp,L_tmp_x,L_tmp_y;
-   Word32 L_temp;
+   int16_t    acc_h;
+   int16_t    sft_x,sft_y;
+   int32_t    L_acc,L_preg,L_cfbg,L_tmp,L_tmp_x,L_tmp_y;
+   int32_t L_temp;
 
  /*--------------------------------------------------------------------------*
    x = (best_gain[1]-(coef[0][0]*best_gain[0]+coef[1][1])*gcode0) * inv_coef;

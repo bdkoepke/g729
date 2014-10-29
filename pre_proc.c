@@ -41,7 +41,7 @@
 /* Static values to be preserved between calls */
 /* y[] values is keep in double precision      */
 
-static Word16 y2_hi, y2_lo, y1_hi, y1_lo, x0, x1;
+static int16_t y2_hi, y2_lo, y1_hi, y1_lo, x0, x1;
 
 
 /* Initialization of static values */
@@ -58,11 +58,11 @@ void Init_Pre_Process(void)
 
 
 void Pre_Process(
-  Word16 signal[],    /* input/output signal */
-  Word16 lg)          /* length of signal    */
+  int16_t signal[],    /* input/output signal */
+  int16_t lg)          /* length of signal    */
 {
-  Word16 i, x2;
-  Word32 L_tmp;
+  int16_t i, x2;
+  int32_t L_tmp;
 
   for(i=0; i<lg; i++)
   {

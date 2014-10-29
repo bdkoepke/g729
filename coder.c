@@ -28,17 +28,17 @@ int main(int argc, char *argv[] )
   FILE *f_speech;               /* File of speech data                   */
   FILE *f_serial;               /* File of serial bits for transmission  */
 
-  extern Word16 *new_speech;     /* Pointer to new speech data            */
+  extern int16_t *new_speech;     /* Pointer to new speech data            */
 
-  Word16 prm[PRM_SIZE+1];        /* Analysis parameters + frame type      */
-  Word16 serial[SERIAL_SIZE];    /* Output bitstream buffer               */
+  int16_t prm[PRM_SIZE+1];        /* Analysis parameters + frame type      */
+  int16_t serial[SERIAL_SIZE];    /* Output bitstream buffer               */
 
-  Word16 frame;                  /* frame counter */
-  Word32 count_frame;
+  int16_t frame;                  /* frame counter */
+  int32_t count_frame;
 
   /* For G.729B */
-  Word16 nb_words;
-  Word16 vad_enable;
+  int16_t nb_words;
+  int16_t vad_enable;
 
   printf("\n");
   printf("***********    ITU G.729A 8 KBIT/S SPEECH CODER    ***********\n");
@@ -83,7 +83,7 @@ int main(int argc, char *argv[] )
   }
   printf(" Output bitstream file:  %s\n", argv[2]);
 
-  vad_enable = (Word16)atoi(argv[3]);
+  vad_enable = (int16_t)atoi(argv[3]);
   if (vad_enable == 1)
     printf(" VAD enabled\n");
   else
@@ -109,7 +109,7 @@ int main(int argc, char *argv[] )
 
   frame = 0;
   count_frame = 0L;
-  while( fread(new_speech, sizeof(Word16), L_FRAME, f_speech) == L_FRAME)
+  while( fread(new_speech, sizeof(int16_t), L_FRAME, f_speech) == L_FRAME)
   {
     printf("Frame = %ld\r", count_frame++);
 
@@ -119,8 +119,8 @@ int main(int argc, char *argv[] )
     Pre_Process(new_speech, L_FRAME);
     Coder_ld8a(prm, frame, vad_enable);
     prm2bits_ld8k( prm, serial);
-    nb_words = serial[1] +  (Word16)2;
-    fwrite(serial, sizeof(Word16), nb_words, f_serial);
+    nb_words = serial[1] +  (int16_t)2;
+    fwrite(serial, sizeof(int16_t), nb_words, f_serial);
   }
 
   printf("%ld frames processed\n", count_frame);

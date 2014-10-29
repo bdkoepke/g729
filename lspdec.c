@@ -15,11 +15,11 @@
 
 /* static memory */
 
-static Word16 freq_prev[MA_NP][M];   /* Q13 */
+static int16_t freq_prev[MA_NP][M];   /* Q13 */
 
 /* static memory for frame erase operation */
-static Word16 prev_ma;                  /* previous MA prediction coef.*/
-static Word16 prev_lsp[M];              /* previous LSP vector         */
+static int16_t prev_ma;                  /* previous MA prediction coef.*/
+static int16_t prev_lsp[M];              /* previous LSP vector         */
 
 
 /*----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ void Lsp_decw_reset(
   void
 )
 {
-  Word16 i;
+  int16_t i;
 
   for(i=0; i<MA_NP; i++)
     Copy( &freq_prev_reset[0], &freq_prev[i][0], M );
@@ -47,22 +47,22 @@ void Lsp_decw_reset(
  *----------------------------------------------------------------------------
  */
 void Lsp_iqua_cs(
- Word16 prm[],          /* (i)     : indexes of the selected LSP */
- Word16 lsp_q[],        /* (o) Q13 : Quantized LSP parameters    */
- Word16 erase           /* (i)     : frame erase information     */
+ int16_t prm[],          /* (i)     : indexes of the selected LSP */
+ int16_t lsp_q[],        /* (o) Q13 : Quantized LSP parameters    */
+ int16_t erase           /* (i)     : frame erase information     */
 )
 {
-  Word16 mode_index;
-  Word16 code0;
-  Word16 code1;
-  Word16 code2;
-  Word16 buf[M];     /* Q13 */
+  int16_t mode_index;
+  int16_t code0;
+  int16_t code1;
+  int16_t code2;
+  int16_t buf[M];     /* Q13 */
 
   if( erase==0 ) {  /* Not frame erasure */
-    mode_index = shr(prm[0] ,NC0_B) & (Word16)1;
-    code0 = prm[0] & (Word16)(NC0 - 1);
-    code1 = shr(prm[1] ,NC1_B) & (Word16)(NC1 - 1);
-    code2 = prm[1] & (Word16)(NC1 - 1);
+    mode_index = shr(prm[0] ,NC0_B) & (int16_t)1;
+    code0 = prm[0] & (int16_t)(NC0 - 1);
+    code1 = shr(prm[1] ,NC1_B) & (int16_t)(NC1 - 1);
+    code2 = prm[1] & (int16_t)(NC1 - 1);
 
     /* compose quantized LSP (lsp_q) from indexes */
 
@@ -97,12 +97,12 @@ void Lsp_iqua_cs(
  *-------------------------------------------------------------------*/
 
 void D_lsp(
-  Word16 prm[],          /* (i)     : indexes of the selected LSP */
-  Word16 lsp_q[],        /* (o) Q15 : Quantized LSP parameters    */
-  Word16 erase           /* (i)     : frame erase information     */
+  int16_t prm[],          /* (i)     : indexes of the selected LSP */
+  int16_t lsp_q[],        /* (o) Q15 : Quantized LSP parameters    */
+  int16_t erase           /* (i)     : frame erase information     */
 )
 {
-  Word16 lsf_q[M];       /* domain 0.0<= lsf_q <PI in Q13 */
+  int16_t lsf_q[M];       /* domain 0.0<= lsf_q <PI in Q13 */
 
 
   Lsp_iqua_cs(prm, lsf_q, erase);
@@ -114,17 +114,17 @@ void D_lsp(
   return;
 }
 
-void Get_decfreq_prev(Word16 x[MA_NP][M])
+void Get_decfreq_prev(int16_t x[MA_NP][M])
 {
-  Word16 i;
+  int16_t i;
 
   for (i=0; i<MA_NP; i++)
     Copy(&freq_prev[i][0], &x[i][0], M);
 }
   
-void Update_decfreq_prev(Word16 x[MA_NP][M])
+void Update_decfreq_prev(int16_t x[MA_NP][M])
 {
-  Word16 i;
+  int16_t i;
 
   for (i=0; i<MA_NP; i++)
     Copy(&x[i][0], &freq_prev[i][0], M);

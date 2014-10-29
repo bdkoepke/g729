@@ -24,15 +24,15 @@
 #include "tab_ld8a.h"
 
 void Pred_lt_3(
-  Word16   exc[],       /* in/out: excitation buffer */
-  Word16   T0,          /* input : integer pitch lag */
-  Word16   frac,        /* input : fraction of lag   */
-  Word16   L_subfr      /* input : subframe size     */
+  int16_t   exc[],       /* in/out: excitation buffer */
+  int16_t   T0,          /* input : integer pitch lag */
+  int16_t   frac,        /* input : fraction of lag   */
+  int16_t   L_subfr      /* input : subframe size     */
 )
 {
-  Word16   i, j, k;
-  Word16   *x0, *x1, *x2, *c1, *c2;
-  Word32  s;
+  int16_t   i, j, k;
+  int16_t   *x0, *x1, *x2, *c1, *c2;
+  int32_t  s;
 
   x0 = &exc[-T0];
 

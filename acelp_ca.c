@@ -27,35 +27,35 @@
 /* local routines definition */
 
 static void Cor_h(
-     Word16 *H,         /* (i) Q12 :Impulse response of filters */
-     Word16 *rr         /* (o)     :Correlations of H[]         */
+     int16_t *H,         /* (i) Q12 :Impulse response of filters */
+     int16_t *rr         /* (o)     :Correlations of H[]         */
 );
-static Word16 D4i40_17_fast(/*(o) : Index of pulses positions.               */
-  Word16 dn[],          /* (i)    : Correlations between h[] and Xn[].       */
-  Word16 *rr,           /* (i)    : Correlations of impulse response h[].    */
-  Word16 h[],           /* (i) Q12: Impulse response of filters.             */
-  Word16 cod[],         /* (o) Q13: Selected algebraic codeword.             */
-  Word16 y[],           /* (o) Q12: Filtered algebraic codeword.             */
-  Word16 *sign          /* (o)    : Signs of 4 pulses.                       */
+static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
+  int16_t dn[],          /* (i)    : Correlations between h[] and Xn[].       */
+  int16_t *rr,           /* (i)    : Correlations of impulse response h[].    */
+  int16_t h[],           /* (i) Q12: Impulse response of filters.             */
+  int16_t cod[],         /* (o) Q13: Selected algebraic codeword.             */
+  int16_t y[],           /* (o) Q12: Filtered algebraic codeword.             */
+  int16_t *sign          /* (o)    : Signs of 4 pulses.                       */
 );
 
  /*-----------------------------------------------------------------*
   * Main ACELP function.                                            *
   *-----------------------------------------------------------------*/
 
-Word16  ACELP_Code_A(    /* (o)     :index of pulses positions    */
-  Word16 x[],            /* (i)     :Target vector                */
-  Word16 h[],            /* (i) Q12 :Inpulse response of filters  */
-  Word16 T0,             /* (i)     :Pitch lag                    */
-  Word16 pitch_sharp,    /* (i) Q14 :Last quantized pitch gain    */
-  Word16 code[],         /* (o) Q13 :Innovative codebook          */
-  Word16 y[],            /* (o) Q12 :Filtered innovative codebook */
-  Word16 *sign           /* (o)     :Signs of 4 pulses            */
+int16_t  ACELP_Code_A(    /* (o)     :index of pulses positions    */
+  int16_t x[],            /* (i)     :Target vector                */
+  int16_t h[],            /* (i) Q12 :Inpulse response of filters  */
+  int16_t T0,             /* (i)     :Pitch lag                    */
+  int16_t pitch_sharp,    /* (i) Q14 :Last quantized pitch gain    */
+  int16_t code[],         /* (o) Q13 :Innovative codebook          */
+  int16_t y[],            /* (o) Q12 :Filtered innovative codebook */
+  int16_t *sign           /* (o)     :Signs of 4 pulses            */
 )
 {
-  Word16 i, index, sharp;
-  Word16 Dn[L_SUBFR];
-  Word16 rr[DIM_RR];
+  int16_t i, index, sharp;
+  int16_t Dn[L_SUBFR];
+  int16_t rr[DIM_RR];
 
  /*-----------------------------------------------------------------*
   * Include fixed-gain pitch contribution into impulse resp. h[]    *
@@ -101,21 +101,21 @@ Word16  ACELP_Code_A(    /* (o)     :index of pulses positions    */
  *--------------------------------------------------------------------------*/
 
 static void Cor_h(
-  Word16 *H,     /* (i) Q12 :Impulse response of filters */
-  Word16 *rr     /* (o)     :Correlations of H[]         */
+  int16_t *H,     /* (i) Q12 :Impulse response of filters */
+  int16_t *rr     /* (o)     :Correlations of H[]         */
 )
 {
-  Word16 *rri0i0, *rri1i1, *rri2i2, *rri3i3, *rri4i4;
-  Word16 *rri0i1, *rri0i2, *rri0i3, *rri0i4;
-  Word16 *rri1i2, *rri1i3, *rri1i4;
-  Word16 *rri2i3, *rri2i4;
+  int16_t *rri0i0, *rri1i1, *rri2i2, *rri3i3, *rri4i4;
+  int16_t *rri0i1, *rri0i2, *rri0i3, *rri0i4;
+  int16_t *rri1i2, *rri1i3, *rri1i4;
+  int16_t *rri2i3, *rri2i4;
 
-  Word16 *p0, *p1, *p2, *p3, *p4;
+  int16_t *p0, *p1, *p2, *p3, *p4;
 
-  Word16 *ptr_hd, *ptr_hf, *ptr_h1, *ptr_h2;
-  Word32 cor;
-  Word16 i, k, ldec, l_fin_sup, l_fin_inf;
-  Word16 h[L_SUBFR];
+  int16_t *ptr_hd, *ptr_hf, *ptr_h1, *ptr_h2;
+  int32_t cor;
+  int16_t i, k, ldec, l_fin_sup, l_fin_inf;
+  int16_t h[L_SUBFR];
 
  /* Scaling h[] for maximum precision */
 
@@ -190,7 +190,7 @@ static void Cor_h(
   *-----------------------------------------------------------------*/
 
   l_fin_sup = MSIZE-1;
-  l_fin_inf = l_fin_sup-(Word16)1;
+  l_fin_inf = l_fin_sup-(int16_t)1;
   ldec = NB_POS+1;
 
   ptr_hd = h;
@@ -207,7 +207,7 @@ static void Cor_h(
           ptr_h1 = ptr_hd;
           ptr_h2 =  ptr_hf;
 
-          for(i=k+(Word16)1; i<NB_POS; i++ ) {
+          for(i=k+(int16_t)1; i<NB_POS; i++ ) {
 
                   cor = L_mac(cor, *ptr_h1, *ptr_h2); ptr_h1++; ptr_h2++;
                   cor = L_mac(cor, *ptr_h1, *ptr_h2); ptr_h1++; ptr_h2++;
@@ -249,7 +249,7 @@ static void Cor_h(
   ptr_hd = h;
   ptr_hf = ptr_hd + 2;
   l_fin_sup = MSIZE-1;
-  l_fin_inf = l_fin_sup-(Word16)1;
+  l_fin_inf = l_fin_sup-(int16_t)1;
   for(k=0; k<NB_POS; k++) {
 
           p4 = rri2i4 + l_fin_sup;
@@ -261,7 +261,7 @@ static void Cor_h(
           cor = 0;
           ptr_h1 = ptr_hd;
           ptr_h2 =  ptr_hf;
-          for(i=k+(Word16)1; i<NB_POS; i++ ) {
+          for(i=k+(int16_t)1; i<NB_POS; i++ ) {
 
                   cor = L_mac(cor, *ptr_h1, *ptr_h2); ptr_h1++; ptr_h2++;
                   *p4 = extract_h(cor);
@@ -306,7 +306,7 @@ static void Cor_h(
   ptr_hd = h;
   ptr_hf = ptr_hd + 3;
   l_fin_sup = MSIZE-1;
-  l_fin_inf = l_fin_sup-(Word16)1;
+  l_fin_inf = l_fin_sup-(int16_t)1;
   for(k=0; k<NB_POS; k++) {
 
           p4 = rri1i4 + l_fin_sup;
@@ -318,7 +318,7 @@ static void Cor_h(
           ptr_h1 = ptr_hd;
           ptr_h2 =  ptr_hf;
           cor = 0;
-          for(i=k+(Word16)1; i<NB_POS; i++ ) {
+          for(i=k+(int16_t)1; i<NB_POS; i++ ) {
 
                   cor = L_mac(cor, *ptr_h1, *ptr_h2); ptr_h1++; ptr_h2++;
                   *p4 = extract_h(cor);
@@ -359,7 +359,7 @@ static void Cor_h(
   ptr_hd = h;
   ptr_hf = ptr_hd + 4;
   l_fin_sup = MSIZE-1;
-  l_fin_inf = l_fin_sup-(Word16)1;
+  l_fin_inf = l_fin_sup-(int16_t)1;
   for(k=0; k<NB_POS; k++) {
 
           p3 = rri0i4 + l_fin_sup;
@@ -370,7 +370,7 @@ static void Cor_h(
           ptr_h1 = ptr_hd;
           ptr_h2 =  ptr_hf;
           cor = 0;
-          for(i=k+(Word16)1; i<NB_POS; i++ ) {
+          for(i=k+(int16_t)1; i<NB_POS; i++ ) {
 
                   cor = L_mac(cor, *ptr_h1, *ptr_h2); ptr_h1++; ptr_h2++;
                   *p3 = extract_h(cor);
@@ -419,33 +419,33 @@ static void Cor_h(
  *            4, 9, 14, 19, 24, 29, 34, 39                                *
  *------------------------------------------------------------------------*/
 
-static Word16 D4i40_17_fast(/*(o) : Index of pulses positions.               */
-  Word16 dn[],          /* (i)    : Correlations between h[] and Xn[].       */
-  Word16 rr[],          /* (i)    : Correlations of impulse response h[].    */
-  Word16 h[],           /* (i) Q12: Impulse response of filters.             */
-  Word16 cod[],         /* (o) Q13: Selected algebraic codeword.             */
-  Word16 y[],           /* (o) Q12: Filtered algebraic codeword.             */
-  Word16 *sign          /* (o)    : Signs of 4 pulses.                       */
+static int16_t D4i40_17_fast(/*(o) : Index of pulses positions.               */
+  int16_t dn[],          /* (i)    : Correlations between h[] and Xn[].       */
+  int16_t rr[],          /* (i)    : Correlations of impulse response h[].    */
+  int16_t h[],           /* (i) Q12: Impulse response of filters.             */
+  int16_t cod[],         /* (o) Q13: Selected algebraic codeword.             */
+  int16_t y[],           /* (o) Q12: Filtered algebraic codeword.             */
+  int16_t *sign          /* (o)    : Signs of 4 pulses.                       */
 )
 {
-  Word16 i0, i1, i2, i3, ip0, ip1, ip2, ip3;
-  Word16 i, j, ix, iy, track, trk, max;
-  Word16 prev_i0, i1_offset;
-  Word16 psk, ps, ps0, ps1, ps2, sq, sq2;
-  Word16 alpk, alp, alp_16;
-  Word32 s, alp0, alp1, alp2;
-  Word16 *p0, *p1, *p2, *p3, *p4;
-  Word16 sign_dn[L_SUBFR], sign_dn_inv[L_SUBFR], *psign;
-  Word16 tmp_vect[NB_POS];
-  Word16 *rri0i0, *rri1i1, *rri2i2, *rri3i3, *rri4i4;
-  Word16 *rri0i1, *rri0i2, *rri0i3, *rri0i4;
-  Word16 *rri1i2, *rri1i3, *rri1i4;
-  Word16 *rri2i3, *rri2i4;
+  int16_t i0, i1, i2, i3, ip0, ip1, ip2, ip3;
+  int16_t i, j, ix, iy, track, trk, max;
+  int16_t prev_i0, i1_offset;
+  int16_t psk, ps, ps0, ps1, ps2, sq, sq2;
+  int16_t alpk, alp, alp_16;
+  int32_t s, alp0, alp1, alp2;
+  int16_t *p0, *p1, *p2, *p3, *p4;
+  int16_t sign_dn[L_SUBFR], sign_dn_inv[L_SUBFR], *psign;
+  int16_t tmp_vect[NB_POS];
+  int16_t *rri0i0, *rri1i1, *rri2i2, *rri3i3, *rri4i4;
+  int16_t *rri0i1, *rri0i2, *rri0i3, *rri0i4;
+  int16_t *rri1i2, *rri1i3, *rri1i4;
+  int16_t *rri2i3, *rri2i4;
 
-  Word16  *ptr_rri0i3_i4;
-  Word16  *ptr_rri1i3_i4;
-  Word16  *ptr_rri2i3_i4;
-  Word16  *ptr_rri3i3_i4;
+  int16_t  *ptr_rri0i3_i4;
+  int16_t  *ptr_rri1i3_i4;
+  int16_t  *ptr_rri2i3_i4;
+  int16_t  *ptr_rri3i3_i4;
 
      /* Init pointers */
    rri0i0 = rr;

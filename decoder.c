@@ -24,7 +24,7 @@
 #include "dtx.h"
 #include "octet.h"
 
-Word16 bad_lsf;        /* bad LSF indicator   */
+int16_t bad_lsf;        /* bad LSF indicator   */
 
 
 /*
@@ -43,14 +43,14 @@ Word16 bad_lsf;        /* bad LSF indicator   */
 
 int main(int argc, char *argv[] )
 {
-  Word16  synth_buf[L_FRAME+M], *synth; /* Synthesis                   */
-  Word16  parm[PRM_SIZE+2];             /* Synthesis parameters        */
-  Word16  Az_dec[MP1*2];                /* Decoded Az for post-filter  */
-  Word16  T2[2];                        /* Pitch lag for 2 subframes   */
+  int16_t  synth_buf[L_FRAME+M], *synth; /* Synthesis                   */
+  int16_t  parm[PRM_SIZE+2];             /* Synthesis parameters        */
+  int16_t  Az_dec[MP1*2];                /* Decoded Az for post-filter  */
+  int16_t  T2[2];                        /* Pitch lag for 2 subframes   */
 
 
-  Word16  i, Vad;
-  Word32  count_frame;
+  int16_t  i, Vad;
+  int32_t  count_frame;
   FILE   *f_syn, *f_serial;
 
   printf("\n");

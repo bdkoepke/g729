@@ -20,14 +20,14 @@
 #include "ld8a.h"
 
 void Convolve(
-  Word16 x[],      /* (i)     : input vector                           */
-  Word16 h[],      /* (i) Q12 : impulse response                       */
-  Word16 y[],      /* (o)     : output vector                          */
-  Word16 L         /* (i)     : vector size                            */
+  int16_t x[],      /* (i)     : input vector                           */
+  int16_t h[],      /* (i) Q12 : impulse response                       */
+  int16_t y[],      /* (o)     : output vector                          */
+  int16_t L         /* (i)     : vector size                            */
 )
 {
-   Word16 i, n;
-   Word32 s;
+   int16_t i, n;
+   int32_t s;
 
    for (n = 0; n < L; n++)
    {
@@ -50,18 +50,18 @@ void Convolve(
 
 
 void Syn_filt(
-  Word16 a[],     /* (i) Q12 : a[m+1] prediction coefficients   (m=10)  */
-  Word16 x[],     /* (i)     : input signal                             */
-  Word16 y[],     /* (o)     : output signal                            */
-  Word16 lg,      /* (i)     : size of filtering                        */
-  Word16 mem[],   /* (i/o)   : memory associated with this filtering.   */
-  Word16 update   /* (i)     : 0=no update, 1=update of memory.         */
+  int16_t a[],     /* (i) Q12 : a[m+1] prediction coefficients   (m=10)  */
+  int16_t x[],     /* (i)     : input signal                             */
+  int16_t y[],     /* (o)     : output signal                            */
+  int16_t lg,      /* (i)     : size of filtering                        */
+  int16_t mem[],   /* (i/o)   : memory associated with this filtering.   */
+  int16_t update   /* (i)     : 0=no update, 1=update of memory.         */
 )
 {
-  Word16 i, j;
-  Word32 s;
-  Word16 tmp[100];     /* This is usually done by memory allocation (lg+M) */
-  Word16 *yy;
+  int16_t i, j;
+  int32_t s;
+  int16_t tmp[100];     /* This is usually done by memory allocation (lg+M) */
+  int16_t *yy;
 
   /* Copy mem[] to yy[] */
 
@@ -107,14 +107,14 @@ void Syn_filt(
  *-----------------------------------------------------------------------*/
 
 void Residu(
-  Word16 a[],    /* (i) Q12 : prediction coefficients                     */
-  Word16 x[],    /* (i)     : speech (values x[-m..-1] are needed         */
-  Word16 y[],    /* (o)     : residual signal                             */
-  Word16 lg      /* (i)     : size of filtering                           */
+  int16_t a[],    /* (i) Q12 : prediction coefficients                     */
+  int16_t x[],    /* (i)     : speech (values x[-m..-1] are needed         */
+  int16_t y[],    /* (o)     : residual signal                             */
+  int16_t lg      /* (i)     : size of filtering                           */
 )
 {
-  Word16 i, j;
-  Word32 s;
+  int16_t i, j;
+  int32_t s;
 
   for (i = 0; i < lg; i++)
   {

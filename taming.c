@@ -17,11 +17,11 @@
 #include "ld8a.h"
 #include "tab_ld8a.h"
 
-static Word32 L_exc_err[4];
+static int32_t L_exc_err[4];
 
 void Init_exc_err(void)
 {
-  Word16 i;
+  int16_t i;
   for(i=0; i<4; i++) L_exc_err[i] = 0x00004000L;   /* Q14 */
 }
 
@@ -30,13 +30,13 @@ void Init_exc_err(void)
  * adaptive codebook contribution                                         *
  **************************************************************************/
 
-Word16 test_err(  /* (o) flag set to 1 if taming is necessary  */
- Word16 T0,       /* (i) integer part of pitch delay           */
- Word16 T0_frac   /* (i) fractional part of pitch delay        */
+int16_t test_err(  /* (o) flag set to 1 if taming is necessary  */
+ int16_t T0,       /* (i) integer part of pitch delay           */
+ int16_t T0_frac   /* (i) fractional part of pitch delay        */
 )
  {
-    Word16 i, t1, zone1, zone2, flag;
-    Word32 L_maxloc, L_acc;
+    int16_t i, t1, zone1, zone2, flag;
+    int32_t L_maxloc, L_acc;
 
     if(T0_frac > 0) {
         t1 = add(T0, 1);
@@ -77,14 +77,14 @@ Word16 test_err(  /* (o) flag set to 1 if taming is necessary  */
  **************************************************************************/
 
 void update_exc_err(
- Word16 gain_pit,      /* (i) pitch gain */
- Word16 T0             /* (i) integer part of pitch delay */
+ int16_t gain_pit,      /* (i) pitch gain */
+ int16_t T0             /* (i) integer part of pitch delay */
 )
  {
 
-    Word16 i, zone1, zone2, n;
-    Word32 L_worst, L_temp, L_acc;
-    Word16 hi, lo;
+    int16_t i, zone1, zone2, n;
+    int32_t L_worst, L_temp, L_acc;
+    int16_t hi, lo;
 
     L_worst = -1L;
     n = sub(T0, L_SUBFR);

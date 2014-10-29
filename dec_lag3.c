@@ -19,16 +19,16 @@
 #include "ld8a.h"
 
 void Dec_lag3(
-  Word16 index,       /* input : received pitch index           */
-  Word16 pit_min,     /* input : minimum pitch lag              */
-  Word16 pit_max,     /* input : maximum pitch lag              */
-  Word16 i_subfr,     /* input : subframe flag                  */
-  Word16 *T0,         /* output: integer part of pitch lag      */
-  Word16 *T0_frac     /* output: fractional part of pitch lag   */
+  int16_t index,       /* input : received pitch index           */
+  int16_t pit_min,     /* input : minimum pitch lag              */
+  int16_t pit_max,     /* input : maximum pitch lag              */
+  int16_t i_subfr,     /* input : subframe flag                  */
+  int16_t *T0,         /* output: integer part of pitch lag      */
+  int16_t *T0_frac     /* output: fractional part of pitch lag   */
 )
 {
-  Word16 i;
-  Word16 T0_min, T0_max;
+  int16_t i;
+  int16_t T0_min, T0_max;
 
   if (i_subfr == 0)                  /* if 1st subframe */
   {

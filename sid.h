@@ -12,10 +12,10 @@
 #define         R_LSFQ 10
 
 void Init_lsfq_noise(void);
-void lsfq_noise(Word16 *lsp_new, Word16 *lspq,
-                Word16 freq_prev[MA_NP][M], Word16 *idx);
-void sid_lsfq_decode(Word16 *index, Word16 *lspq, 
-                     Word16 freq_prev[MA_NP][M]); 
+void lsfq_noise(int16_t *lsp_new, int16_t *lspq,
+                int16_t freq_prev[MA_NP][M], int16_t *idx);
+void sid_lsfq_decode(int16_t *index, int16_t *lspq, 
+                     int16_t freq_prev[MA_NP][M]); 
 
 
 

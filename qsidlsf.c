@@ -19,36 +19,36 @@
 #include "tab_dtx.h"
 
 /* local functions */
-static void Qnt_e(Word16 *errlsf,    /* (i)  : error lsf vector             */
-                  Word16 *weight,    /* (i)  : weighting vector             */
-                  Word16 DIn,        /* (i)  : number of input candidates   */
-                  Word16 *qlsf,      /* (o)  : quantized error lsf vector   */
-                  Word16 *Pptr,      /* (o)  : predictor index              */
-                  Word16 DOut,       /* (i)  : number of quantized vectors  */
-                  Word16 *cluster,   /* (o)  : quantizer indices            */
-                  Word16 *MS         /* (i)  : size of the quantizers       */
+static void Qnt_e(int16_t *errlsf,    /* (i)  : error lsf vector             */
+                  int16_t *weight,    /* (i)  : weighting vector             */
+                  int16_t DIn,        /* (i)  : number of input candidates   */
+                  int16_t *qlsf,      /* (o)  : quantized error lsf vector   */
+                  int16_t *Pptr,      /* (o)  : predictor index              */
+                  int16_t DOut,       /* (i)  : number of quantized vectors  */
+                  int16_t *cluster,   /* (o)  : quantizer indices            */
+                  int16_t *MS         /* (i)  : size of the quantizers       */
                   );
 
-static void New_ML_search_1(Word16 *d_data,    /* (i) : error vector             */
-                            Word16 J,          /* (i) : number of input vectors  */
-                            Word16 *new_d_data,/* (o) : output vector            */
-                            Word16 K,          /* (i) : number of candidates     */
-                            Word16 *best_indx, /* (o) : best indices             */
-                            Word16 *ptr_back,  /* (o) : pointer for backtracking */
-                            Word16 *PtrTab,    /* (i) : quantizer table          */
-                            Word16 MQ          /* (i) : size of quantizer        */
+static void New_ML_search_1(int16_t *d_data,    /* (i) : error vector             */
+                            int16_t J,          /* (i) : number of input vectors  */
+                            int16_t *new_d_data,/* (o) : output vector            */
+                            int16_t K,          /* (i) : number of candidates     */
+                            int16_t *best_indx, /* (o) : best indices             */
+                            int16_t *ptr_back,  /* (o) : pointer for backtracking */
+                            int16_t *PtrTab,    /* (i) : quantizer table          */
+                            int16_t MQ          /* (i) : size of quantizer        */
                             );
 
-static void New_ML_search_2(Word16 *d_data,    /* (i) : error vector             */
-                            Word16 *weight,    /* (i) : weighting vector         */
-                            Word16 J,          /* (i) : number of input vectors  */
-                            Word16 *new_d_data,/* (o) : output vector            */
-                            Word16 K,          /* (i) : number of candidates     */
-                            Word16 *best_indx, /* (o) : best indices             */
-                            Word16 *ptr_prd,   /* (i) : pointer for backtracking */
-                            Word16 *ptr_back,  /* (o) : pointer for backtracking */
-                            Word16 PtrTab[2][16],/* (i) : quantizer table        */
-                            Word16 MQ          /* (i) : size of quantizer        */
+static void New_ML_search_2(int16_t *d_data,    /* (i) : error vector             */
+                            int16_t *weight,    /* (i) : weighting vector         */
+                            int16_t J,          /* (i) : number of input vectors  */
+                            int16_t *new_d_data,/* (o) : output vector            */
+                            int16_t K,          /* (i) : number of candidates     */
+                            int16_t *best_indx, /* (o) : best indices             */
+                            int16_t *ptr_prd,   /* (i) : pointer for backtracking */
+                            int16_t *ptr_back,  /* (o) : pointer for backtracking */
+                            int16_t PtrTab[2][16],/* (i) : quantizer table        */
+                            int16_t MQ          /* (i) : size of quantizer        */
                             );
 
 
@@ -65,14 +65,14 @@ static void New_ML_search_2(Word16 *d_data,    /* (i) : error vector            
  *   ana[]         : indices                                       *
  *                                                                 *
  *-----------------------------------------------------------------*/
-void lsfq_noise(Word16 *lsp, 
-                Word16 *lspq, 
-                Word16 freq_prev[MA_NP][M], 
-                Word16 *ana
+void lsfq_noise(int16_t *lsp, 
+                int16_t *lspq, 
+                int16_t freq_prev[MA_NP][M], 
+                int16_t *ana
                 )
 {
-  Word16 i, lsf[M], lsfq[M], weight[M], tmpbuf[M];
-  Word16 MS[MODE]={32, 16}, Clust[MODE], mode, errlsf[M*MODE];
+  int16_t i, lsf[M], lsfq[M], weight[M], tmpbuf[M];
+  int16_t MS[MODE]={32, 16}, Clust[MODE], mode, errlsf[M*MODE];
 
   /* convert lsp to lsf */
   Lsp_lsf2(lsp, lsf, M);
@@ -125,18 +125,18 @@ void lsfq_noise(Word16 *lsp,
 
 }
 
-static void Qnt_e(Word16 *errlsf,    /* (i)  : error lsf vector             */
-                  Word16 *weight,    /* (i)  : weighting vector             */
-                  Word16 DIn,        /* (i)  : number of input candidates   */
-                  Word16 *qlsf,      /* (o)  : quantized error lsf vector   */
-                  Word16 *Pptr,      /* (o)  : predictor index              */
-                  Word16 DOut,       /* (i)  : number of quantized vectors  */
-                  Word16 *cluster,   /* (o)  : quantizer indices            */
-                  Word16 *MS         /* (i)  : size of the quantizers       */
+static void Qnt_e(int16_t *errlsf,    /* (i)  : error lsf vector             */
+                  int16_t *weight,    /* (i)  : weighting vector             */
+                  int16_t DIn,        /* (i)  : number of input candidates   */
+                  int16_t *qlsf,      /* (o)  : quantized error lsf vector   */
+                  int16_t *Pptr,      /* (o)  : predictor index              */
+                  int16_t DOut,       /* (i)  : number of quantized vectors  */
+                  int16_t *cluster,   /* (o)  : quantizer indices            */
+                  int16_t *MS         /* (i)  : size of the quantizers       */
 )
 {
-  Word16 d_data[2][R_LSFQ*M], best_indx[2][R_LSFQ];
-  Word16 ptr_back[2][R_LSFQ], ptr, i;
+  int16_t d_data[2][R_LSFQ*M], best_indx[2][R_LSFQ];
+  int16_t ptr_back[2][R_LSFQ], ptr, i;
 
   New_ML_search_1(errlsf, DIn, d_data[0], 4, best_indx[0], ptr_back[0], 
                   PtrTab_1, MS[0]);
@@ -160,19 +160,19 @@ static void Qnt_e(Word16 *errlsf,    /* (i)  : error lsf vector             */
 
 }
 
-static void New_ML_search_1(Word16 *d_data,    /* (i) : error vector             */
-                            Word16 J,          /* (i) : number of input vectors  */
-                            Word16 *new_d_data,/* (o) : output vector            */
-                            Word16 K,          /* (i) : number of candidates     */
-                            Word16 *best_indx, /* (o) : best indices             */
-                            Word16 *ptr_back,  /* (o) : pointer for backtracking */
-                            Word16 *PtrTab,    /* (i) : quantizer table          */
-                            Word16 MQ          /* (i) : size of quantizer        */
+static void New_ML_search_1(int16_t *d_data,    /* (i) : error vector             */
+                            int16_t J,          /* (i) : number of input vectors  */
+                            int16_t *new_d_data,/* (o) : output vector            */
+                            int16_t K,          /* (i) : number of candidates     */
+                            int16_t *best_indx, /* (o) : best indices             */
+                            int16_t *ptr_back,  /* (o) : pointer for backtracking */
+                            int16_t *PtrTab,    /* (i) : quantizer table          */
+                            int16_t MQ          /* (i) : size of quantizer        */
 )
 {
-  Word16 tmp, m, l, p, q, sum[R_LSFQ*R_LSFQ];
-  Word16 min[R_LSFQ], min_indx_p[R_LSFQ], min_indx_m[R_LSFQ];
-  Word32 acc0;
+  int16_t tmp, m, l, p, q, sum[R_LSFQ*R_LSFQ];
+  int16_t min[R_LSFQ], min_indx_p[R_LSFQ], min_indx_m[R_LSFQ];
+  int32_t acc0;
 
   for (q=0; q<K; q++)
     min[q] = MAX_16;
@@ -213,22 +213,22 @@ static void New_ML_search_1(Word16 *d_data,    /* (i) : error vector            
   }
 }
 
-static void New_ML_search_2(Word16 *d_data,    /* (i) : error vector             */
-                            Word16 *weight,    /* (i) : weighting vector         */
-                            Word16 J,          /* (i) : number of input vectors  */
-                            Word16 *new_d_data,/* (o) : output vector            */
-                            Word16 K,          /* (i) : number of candidates     */
-                            Word16 *best_indx, /* (o) : best indices             */
-                            Word16 *ptr_prd,   /* (i) : pointer for backtracking */
-                            Word16 *ptr_back,  /* (o) : pointer for backtracking */
-                            Word16 PtrTab[2][16],/* (i) : quantizer table        */
-                            Word16 MQ          /* (i) : size of quantizer        */
+static void New_ML_search_2(int16_t *d_data,    /* (i) : error vector             */
+                            int16_t *weight,    /* (i) : weighting vector         */
+                            int16_t J,          /* (i) : number of input vectors  */
+                            int16_t *new_d_data,/* (o) : output vector            */
+                            int16_t K,          /* (i) : number of candidates     */
+                            int16_t *best_indx, /* (o) : best indices             */
+                            int16_t *ptr_prd,   /* (i) : pointer for backtracking */
+                            int16_t *ptr_back,  /* (o) : pointer for backtracking */
+                            int16_t PtrTab[2][16],/* (i) : quantizer table        */
+                            int16_t MQ          /* (i) : size of quantizer        */
 )
 {
-  Word16 m, l, p, q, sum[R_LSFQ*R_LSFQ];
-  Word16 min[R_LSFQ], min_indx_p[R_LSFQ], min_indx_m[R_LSFQ];
-  Word16 tmp1, tmp2;
-  Word32 acc0;
+  int16_t m, l, p, q, sum[R_LSFQ*R_LSFQ];
+  int16_t min[R_LSFQ], min_indx_p[R_LSFQ], min_indx_m[R_LSFQ];
+  int16_t tmp1, tmp2;
+  int32_t acc0;
 
   for (q=0; q<K; q++)
     min[q] = MAX_16;

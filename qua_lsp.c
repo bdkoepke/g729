@@ -19,12 +19,12 @@
 #include "tab_ld8a.h"
 
 void Qua_lsp(
-  Word16 lsp[],       /* (i) Q15 : Unquantized LSP            */
-  Word16 lsp_q[],     /* (o) Q15 : Quantized LSP              */
-  Word16 ana[]        /* (o)     : indexes                    */
+  int16_t lsp[],       /* (i) Q15 : Unquantized LSP            */
+  int16_t lsp_q[],     /* (o) Q15 : Quantized LSP              */
+  int16_t ana[]        /* (o)     : indexes                    */
 )
 {
-  Word16 lsf[M], lsf_q[M];  /* domain 0.0<= lsf <PI in Q13 */
+  int16_t lsf[M], lsf_q[M];  /* domain 0.0<= lsf <PI in Q13 */
 
   /* Convert LSPs to LSFs */
   Lsp_lsf2(lsp, lsf, M);
@@ -39,13 +39,13 @@ void Qua_lsp(
 
 /* static memory */
 
-static Word16 freq_prev[MA_NP][M];    /* Q13:previous LSP vector       */
+static int16_t freq_prev[MA_NP][M];    /* Q13:previous LSP vector       */
 
 void Lsp_encw_reset(
   void
 )
 {
-  Word16 i;
+  int16_t i;
 
   for(i=0; i<MA_NP; i++)
     Copy( &freq_prev_reset[0], &freq_prev[i][0], M );
@@ -53,12 +53,12 @@ void Lsp_encw_reset(
 
 
 void Lsp_qua_cs(
-  Word16 flsp_in[M],    /* (i) Q13 : Original LSP parameters    */
-  Word16 lspq_out[M],   /* (o) Q13 : Quantized LSP parameters   */
-  Word16 *code          /* (o)     : codes of the selected LSP  */
+  int16_t flsp_in[M],    /* (i) Q13 : Original LSP parameters    */
+  int16_t lspq_out[M],   /* (o) Q13 : Quantized LSP parameters   */
+  int16_t *code          /* (o)     : codes of the selected LSP  */
 )
 {
-  Word16 wegt[M];       /* Q11->normalized : weighting coefficients */
+  int16_t wegt[M];       /* Q11->normalized : weighting coefficients */
 
   Get_wegt( flsp_in, wegt );
 
@@ -67,25 +67,25 @@ void Lsp_qua_cs(
 }
 
 void Relspwed(
-  Word16 lsp[],                 /* (i) Q13 : unquantized LSP parameters */
-  Word16 wegt[],                /* (i) norm: weighting coefficients     */
-  Word16 lspq[],                /* (o) Q13 : quantized LSP parameters   */
-  Word16 lspcb1[][M],           /* (i) Q13 : first stage LSP codebook   */
-  Word16 lspcb2[][M],           /* (i) Q13 : Second stage LSP codebook  */
-  Word16 fg[MODE][MA_NP][M],    /* (i) Q15 : MA prediction coefficients */
-  Word16 freq_prev[MA_NP][M],   /* (i) Q13 : previous LSP vector        */
-  Word16 fg_sum[MODE][M],       /* (i) Q15 : present MA prediction coef.*/
-  Word16 fg_sum_inv[MODE][M],   /* (i) Q12 : inverse coef.              */
-  Word16 code_ana[]             /* (o)     : codes of the selected LSP  */
+  int16_t lsp[],                 /* (i) Q13 : unquantized LSP parameters */
+  int16_t wegt[],                /* (i) norm: weighting coefficients     */
+  int16_t lspq[],                /* (o) Q13 : quantized LSP parameters   */
+  int16_t lspcb1[][M],           /* (i) Q13 : first stage LSP codebook   */
+  int16_t lspcb2[][M],           /* (i) Q13 : Second stage LSP codebook  */
+  int16_t fg[MODE][MA_NP][M],    /* (i) Q15 : MA prediction coefficients */
+  int16_t freq_prev[MA_NP][M],   /* (i) Q13 : previous LSP vector        */
+  int16_t fg_sum[MODE][M],       /* (i) Q15 : present MA prediction coef.*/
+  int16_t fg_sum_inv[MODE][M],   /* (i) Q12 : inverse coef.              */
+  int16_t code_ana[]             /* (o)     : codes of the selected LSP  */
 )
 {
-  Word16 mode, j;
-  Word16 index, mode_index;
-  Word16 cand[MODE], cand_cur;
-  Word16 tindex1[MODE], tindex2[MODE];
-  Word32 L_tdist[MODE];         /* Q26 */
-  Word16 rbuf[M];               /* Q13 */
-  Word16 buf[M];                /* Q13 */
+  int16_t mode, j;
+  int16_t index, mode_index;
+  int16_t cand[MODE], cand_cur;
+  int16_t tindex1[MODE], tindex2[MODE];
+  int32_t L_tdist[MODE];         /* Q26 */
+  int16_t rbuf[M];               /* Q13 */
+  int16_t buf[M];                /* Q13 */
 
   for(mode = 0; mode<MODE; mode++) {
     Lsp_prev_extract(lsp, rbuf, fg[mode], freq_prev, fg_sum_inv[mode]);
@@ -130,16 +130,16 @@ void Relspwed(
 
 
 void Lsp_pre_select(
-  Word16 rbuf[],              /* (i) Q13 : target vetor             */
-  Word16 lspcb1[][M],         /* (i) Q13 : first stage LSP codebook */
-  Word16 *cand                /* (o)     : selected code            */
+  int16_t rbuf[],              /* (i) Q13 : target vetor             */
+  int16_t lspcb1[][M],         /* (i) Q13 : first stage LSP codebook */
+  int16_t *cand                /* (o)     : selected code            */
 )
 {
-  Word16 i, j;
-  Word16 tmp;                 /* Q13 */
-  Word32 L_dmin;              /* Q26 */
-  Word32 L_tmp;               /* Q26 */
-  Word32 L_temp;
+  int16_t i, j;
+  int16_t tmp;                 /* Q13 */
+  int32_t L_dmin;              /* Q26 */
+  int32_t L_tmp;               /* Q26 */
+  int32_t L_temp;
 
   /* avoid the worst case. (all over flow) */
 
@@ -164,19 +164,19 @@ void Lsp_pre_select(
 
 
 void Lsp_select_1(
-  Word16 rbuf[],              /* (i) Q13 : target vector             */
-  Word16 lspcb1[],            /* (i) Q13 : first stage lsp codebook  */
-  Word16 wegt[],              /* (i) norm: weighting coefficients    */
-  Word16 lspcb2[][M],         /* (i) Q13 : second stage lsp codebook */
-  Word16 *index               /* (o)     : selected codebook index   */
+  int16_t rbuf[],              /* (i) Q13 : target vector             */
+  int16_t lspcb1[],            /* (i) Q13 : first stage lsp codebook  */
+  int16_t wegt[],              /* (i) norm: weighting coefficients    */
+  int16_t lspcb2[][M],         /* (i) Q13 : second stage lsp codebook */
+  int16_t *index               /* (o)     : selected codebook index   */
 )
 {
-  Word16 j, k1;
-  Word16 buf[M];              /* Q13 */
-  Word32 L_dist;              /* Q26 */
-  Word32 L_dmin;              /* Q26 */
-  Word16 tmp,tmp2;            /* Q13 */
-  Word32 L_temp;
+  int16_t j, k1;
+  int16_t buf[M];              /* Q13 */
+  int32_t L_dist;              /* Q26 */
+  int32_t L_dmin;              /* Q26 */
+  int16_t tmp,tmp2;            /* Q13 */
+  int32_t L_temp;
 
   for ( j = 0 ; j < NC ; j++ )
     buf[j] = sub(rbuf[j], lspcb1[j]);
@@ -204,19 +204,19 @@ void Lsp_select_1(
 
 
 void Lsp_select_2(
-  Word16 rbuf[],              /* (i) Q13 : target vector             */
-  Word16 lspcb1[],            /* (i) Q13 : first stage lsp codebook  */
-  Word16 wegt[],              /* (i) norm: weighting coef.           */
-  Word16 lspcb2[][M],         /* (i) Q13 : second stage lsp codebook */
-  Word16 *index               /* (o)     : selected codebook index   */
+  int16_t rbuf[],              /* (i) Q13 : target vector             */
+  int16_t lspcb1[],            /* (i) Q13 : first stage lsp codebook  */
+  int16_t wegt[],              /* (i) norm: weighting coef.           */
+  int16_t lspcb2[][M],         /* (i) Q13 : second stage lsp codebook */
+  int16_t *index               /* (o)     : selected codebook index   */
 )
 {
-  Word16 j, k1;
-  Word16 buf[M];              /* Q13 */
-  Word32 L_dist;              /* Q26 */
-  Word32 L_dmin;              /* Q26 */
-  Word16 tmp,tmp2;            /* Q13 */
-  Word32 L_temp;
+  int16_t j, k1;
+  int16_t buf[M];              /* Q13 */
+  int32_t L_dist;              /* Q26 */
+  int32_t L_dmin;              /* Q26 */
+  int16_t tmp,tmp2;            /* Q13 */
+  int32_t L_temp;
 
   for ( j = NC ; j < M ; j++ )
     buf[j] = sub(rbuf[j], lspcb1[j]);
@@ -244,16 +244,16 @@ void Lsp_select_2(
 
 
 void Lsp_get_tdist(
-  Word16 wegt[],        /* (i) norm: weight coef.                */
-  Word16 buf[],         /* (i) Q13 : candidate LSP vector        */
-  Word32 *L_tdist,      /* (o) Q27 : distortion                  */
-  Word16 rbuf[],        /* (i) Q13 : target vector               */
-  Word16 fg_sum[]       /* (i) Q15 : present MA prediction coef. */
+  int16_t wegt[],        /* (i) norm: weight coef.                */
+  int16_t buf[],         /* (i) Q13 : candidate LSP vector        */
+  int32_t *L_tdist,      /* (o) Q27 : distortion                  */
+  int16_t rbuf[],        /* (i) Q13 : target vector               */
+  int16_t fg_sum[]       /* (i) Q15 : present MA prediction coef. */
 )
 {
-  Word16 j;
-  Word16 tmp, tmp2;     /* Q13 */
-  Word32 L_acc;         /* Q25 */
+  int16_t j;
+  int16_t tmp, tmp2;     /* Q13 */
+  int32_t L_acc;         /* Q25 */
 
   *L_tdist = 0;
   for ( j = 0 ; j < M ; j++ ) {
@@ -273,11 +273,11 @@ void Lsp_get_tdist(
 
 
 void Lsp_last_select(
-  Word32 L_tdist[],     /* (i) Q27 : distortion         */
-  Word16 *mode_index    /* (o)     : the selected mode  */
+  int32_t L_tdist[],     /* (i) Q27 : distortion         */
+  int16_t *mode_index    /* (o)     : the selected mode  */
 )
 {
-    Word32 L_temp;
+    int32_t L_temp;
   *mode_index = 0;
   L_temp =L_sub(L_tdist[1] ,L_tdist[0]);
   if (  L_temp<0L){
@@ -287,15 +287,15 @@ void Lsp_last_select(
 }
 
 void Get_wegt(
-  Word16 flsp[],    /* (i) Q13 : M LSP parameters  */
-  Word16 wegt[]     /* (o) Q11->norm : M weighting coefficients */
+  int16_t flsp[],    /* (i) Q13 : M LSP parameters  */
+  int16_t wegt[]     /* (o) Q11->norm : M weighting coefficients */
 )
 {
-  Word16 i;
-  Word16 tmp;
-  Word32 L_acc;
-  Word16 sft;
-  Word16 buf[M]; /* in Q13 */
+  int16_t i;
+  int16_t tmp;
+  int32_t L_acc;
+  int16_t sft;
+  int16_t buf[M]; /* in Q13 */
 
 
   buf[0] = sub( flsp[1], (PI04+8192) );           /* 8192:1.0(Q13) */
@@ -347,17 +347,17 @@ void Get_wegt(
 }
 
 
-void Get_freq_prev(Word16 x[MA_NP][M])
+void Get_freq_prev(int16_t x[MA_NP][M])
 {
-  Word16 i;
+  int16_t i;
 
   for (i=0; i<MA_NP; i++)
     Copy(&freq_prev[i][0], &x[i][0], M);
 }
   
-void Update_freq_prev(Word16 x[MA_NP][M])
+void Update_freq_prev(int16_t x[MA_NP][M])
 {
-  Word16 i;
+  int16_t i;
 
   for (i=0; i<MA_NP; i++)
     Copy(&x[i][0], &freq_prev[i][0], M);

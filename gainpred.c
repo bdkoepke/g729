@@ -27,15 +27,15 @@
  * removed).                                                                 *
  *---------------------------------------------------------------------------*/
 void Gain_predict(
-   Word16 past_qua_en[], /* (i) Q10 :Past quantized energies        */
-   Word16 code[],        /* (i) Q13 :Innovative vector.             */
-   Word16 L_subfr,       /* (i)     :Subframe length.               */
-   Word16 *gcode0,       /* (o) Qxx :Predicted codebook gain        */
-   Word16 *exp_gcode0    /* (o)     :Q-Format(gcode0)               */
+   int16_t past_qua_en[], /* (i) Q10 :Past quantized energies        */
+   int16_t code[],        /* (i) Q13 :Innovative vector.             */
+   int16_t L_subfr,       /* (i)     :Subframe length.               */
+   int16_t *gcode0,       /* (o) Qxx :Predicted codebook gain        */
+   int16_t *exp_gcode0    /* (o)     :Q-Format(gcode0)               */
 )
 {
-   Word16  i, exp, frac;
-   Word32  L_tmp;
+   int16_t  i, exp, frac;
+   int32_t  L_tmp;
 
   /*-------------------------------*
    * Energy coming from code       *
@@ -97,13 +97,13 @@ void Gain_predict(
  * update table of past quantized energies                                   *
  *---------------------------------------------------------------------------*/
 void Gain_update(
-   Word16 past_qua_en[],   /* (io) Q10 :Past quantized energies           */
-   Word32  L_gbk12         /* (i) Q13 : gbk1[indice1][1]+gbk2[indice2][1] */
+   int16_t past_qua_en[],   /* (io) Q10 :Past quantized energies           */
+   int32_t  L_gbk12         /* (i) Q13 : gbk1[indice1][1]+gbk2[indice2][1] */
 )
 {
-   Word16  i, tmp;
-   Word16  exp, frac;
-   Word32  L_acc;
+   int16_t  i, tmp;
+   int16_t  exp, frac;
+   int32_t  L_acc;
 
    for(i=3; i>0; i--){
       past_qua_en[i] = past_qua_en[i-1];         /* Q10 */
@@ -135,11 +135,11 @@ void Gain_update(
  *     if (av_pred_en < -14.0) av_pred_en = -14.0;                           *
  *---------------------------------------------------------------------------*/
 void Gain_update_erasure(
-   Word16 past_qua_en[]     /* (i) Q10 :Past quantized energies        */
+   int16_t past_qua_en[]     /* (i) Q10 :Past quantized energies        */
 )
 {
-   Word16  i, av_pred_en;
-   Word32  L_tmp;
+   int16_t  i, av_pred_en;
+   int32_t  L_tmp;
 
    L_tmp = 0;                                                     /* Q10 */
    for(i=0; i<4; i++)

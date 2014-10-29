@@ -19,11 +19,11 @@
 #include "ld8a.h"
 
 void Set_zero(
-  Word16 x[],       /* (o)    : vector to clear     */
-  Word16 L          /* (i)    : length of vector    */
+  int16_t x[],       /* (o)    : vector to clear     */
+  int16_t L          /* (i)    : length of vector    */
 )
 {
-   Word16 i;
+   int16_t i;
 
    for (i = 0; i < L; i++)
      x[i] = 0;
@@ -37,12 +37,12 @@ void Set_zero(
  *-------------------------------------------------------------------*/
 
 void Copy(
-  Word16 x[],      /* (i)   : input vector   */
-  Word16 y[],      /* (o)   : output vector  */
-  Word16 L         /* (i)   : vector length  */
+  int16_t x[],      /* (i)   : input vector   */
+  int16_t y[],      /* (o)   : output vector  */
+  int16_t L         /* (i)   : vector length  */
 )
 {
-   Word16 i;
+   int16_t i;
 
    for (i = 0; i < L; i++)
      y[i] = x[i];
@@ -52,7 +52,7 @@ void Copy(
 
 /* Random generator  */
 
-Word16 Random(Word16 *seed)
+int16_t Random(int16_t *seed)
 {
 
   /* seed = seed*31821 + 13849; */

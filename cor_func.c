@@ -24,18 +24,18 @@
  *---------------------------------------------------------------------------*/
 
 void Corr_xy2(
-      Word16 xn[],           /* (i) Q0  :Target vector.                  */
-      Word16 y1[],           /* (i) Q0  :Adaptive codebook.              */
-      Word16 y2[],           /* (i) Q12 :Filtered innovative vector.     */
-      Word16 g_coeff[],      /* (o) Q[exp]:Correlations between xn,y1,y2 */
-      Word16 exp_g_coeff[]   /* (o)       :Q-format of g_coeff[]         */
+      int16_t xn[],           /* (i) Q0  :Target vector.                  */
+      int16_t y1[],           /* (i) Q0  :Adaptive codebook.              */
+      int16_t y2[],           /* (i) Q12 :Filtered innovative vector.     */
+      int16_t g_coeff[],      /* (o) Q[exp]:Correlations between xn,y1,y2 */
+      int16_t exp_g_coeff[]   /* (o)       :Q-format of g_coeff[]         */
 )
 {
-      Word16   i,exp;
-      Word16   exp_y2y2,exp_xny2,exp_y1y2;
-      Word16   y2y2,    xny2,    y1y2;
-      Word32   L_acc;
-      Word16   scaled_y2[L_SUBFR];       /* Q9 */
+      int16_t   i,exp;
+      int16_t   exp_y2y2,exp_xny2,exp_y1y2;
+      int16_t   y2y2,    xny2,    y1y2;
+      int32_t   L_acc;
+      int16_t   scaled_y2[L_SUBFR];       /* Q9 */
 
       /*------------------------------------------------------------------*
        * Scale down y2[] from Q12 to Q9 to avoid overflow                 *
@@ -89,15 +89,15 @@ void Corr_xy2(
  *--------------------------------------------------------------------------*/
 
 void Cor_h_X(
-     Word16 h[],        /* (i) Q12 :Impulse response of filters      */
-     Word16 X[],        /* (i)     :Target vector                    */
-     Word16 D[]         /* (o)     :Correlations between h[] and D[] */
+     int16_t h[],        /* (i) Q12 :Impulse response of filters      */
+     int16_t X[],        /* (i)     :Target vector                    */
+     int16_t D[]         /* (o)     :Correlations between h[] and D[] */
                         /*          Normalized to 13 bits            */
 )
 {
-   Word16 i, j;
-   Word32 s, max, L_temp;
-   Word32 y32[L_SUBFR];
+   int16_t i, j;
+   int32_t s, max, L_temp;
+   int32_t y32[L_SUBFR];
 
    /* first keep the result on 32 bits and find absolute maximum */
 

@@ -21,10 +21,10 @@
 #include "tab_dtx.h"
 
 /* Local function */
-static Word16 Quant_Energy(
-  Word32 L_x,    /* (i)  : Energy                 */
-  Word16 sh,     /* (i)  : Exponent of the energy */
-  Word16 *enerq  /* (o)  : quantized energy in dB */
+static int16_t Quant_Energy(
+  int32_t L_x,    /* (i)  : Energy                 */
+  int16_t sh,     /* (i)  : Exponent of the energy */
+  int16_t *enerq  /* (o)  : quantized energy in dB */
 );
 
 /*-------------------------------------------------------------------*
@@ -32,18 +32,18 @@ static Word16 Quant_Energy(
  *           ~~~~~~~~~~~                                             *
  *-------------------------------------------------------------------*/
 void Qua_Sidgain(
-  Word16 *ener,     /* (i)   array of energies                   */
-  Word16 *sh_ener,  /* (i)   corresponding scaling factors       */
-  Word16 nb_ener,   /* (i)   number of energies or               */
-  Word16 *enerq,    /* (o)   decoded energies in dB              */
-  Word16 *idx       /* (o)   SID gain quantization index         */
+  int16_t *ener,     /* (i)   array of energies                   */
+  int16_t *sh_ener,  /* (i)   corresponding scaling factors       */
+  int16_t nb_ener,   /* (i)   number of energies or               */
+  int16_t *enerq,    /* (o)   decoded energies in dB              */
+  int16_t *idx       /* (o)   SID gain quantization index         */
 )
 {
-  Word16 i;
-  Word32 L_x;
-  Word16 sh1, temp;
-  Word16 hi, lo;
-  Word32 L_acc;
+  int16_t i;
+  int32_t L_x;
+  int16_t sh1, temp;
+  int16_t hi, lo;
+  int32_t L_acc;
   
   if(nb_ener == 0) {
     /* Quantize energy saved for frame erasure case                */
@@ -86,15 +86,15 @@ void Qua_Sidgain(
 
 /* Local function */
 
-static Word16 Quant_Energy(
-  Word32 L_x,    /* (i)  : Energy                 */
-  Word16 sh,     /* (i)  : Exponent of the energy */
-  Word16 *enerq  /* (o)  : quantized energy in dB */
+static int16_t Quant_Energy(
+  int32_t L_x,    /* (i)  : Energy                 */
+  int16_t sh,     /* (i)  : Exponent of the energy */
+  int16_t *enerq  /* (o)  : quantized energy in dB */
 )
 {
 
-  Word16 exp, frac;
-  Word16 e_tmp, temp, index;
+  int16_t exp, frac;
+  int16_t e_tmp, temp, index;
 
   Log2(L_x, &exp, &frac);
   temp = sub(exp, sh);

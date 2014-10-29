@@ -41,32 +41,32 @@
 
         /* Excitation vector */
 
- static Word16 old_exc[L_FRAME+PIT_MAX+L_INTERPOL];
- static Word16 *exc;
+ static int16_t old_exc[L_FRAME+PIT_MAX+L_INTERPOL];
+ static int16_t *exc;
 
         /* Lsp (Line spectral pairs) */
 
- static Word16 lsp_old[M]={
+ static int16_t lsp_old[M]={
              30000, 26000, 21000, 15000, 8000, 0, -8000,-15000,-21000,-26000};
 
         /* Filter's memory */
 
- static Word16 mem_syn[M];
+ static int16_t mem_syn[M];
 
- static Word16 sharp;           /* pitch sharpening of previous frame */
- static Word16 old_T0;          /* integer delay of previous frame    */
- static Word16 gain_code;       /* Code gain                          */
- static Word16 gain_pitch;      /* Pitch gain                         */
+ static int16_t sharp;           /* pitch sharpening of previous frame */
+ static int16_t old_T0;          /* integer delay of previous frame    */
+ static int16_t gain_code;       /* Code gain                          */
+ static int16_t gain_pitch;      /* Pitch gain                         */
 
 
 
 
 /* for G.729B */
-static Word16 seed_fer;
+static int16_t seed_fer;
 /* CNG variables */
-static Word16 past_ftyp;
-static Word16 seed;
-static Word16 sid_sav, sh_sid_sav;
+static int16_t past_ftyp;
+static int16_t seed;
+static int16_t sid_sav, sh_sid_sav;
 
 
 
@@ -116,31 +116,31 @@ void Init_Decod_ld8a(void)
  *-----------------------------------------------------------------*/
 
 void Decod_ld8a(
-  Word16  parm[],      /* (i)   : vector of synthesis parameters
+  int16_t  parm[],      /* (i)   : vector of synthesis parameters
                                   parm[0] = bad frame indicator (bfi)  */
-  Word16  synth[],     /* (o)   : synthesis speech                     */
-  Word16  A_t[],       /* (o)   : decoded LP filter in 2 subframes     */
-  Word16  *T2,         /* (o)   : decoded pitch lag in 2 subframes     */
-  Word16  *Vad         /* (o)   : frame type                           */
+  int16_t  synth[],     /* (o)   : synthesis speech                     */
+  int16_t  A_t[],       /* (o)   : decoded LP filter in 2 subframes     */
+  int16_t  *T2,         /* (o)   : decoded pitch lag in 2 subframes     */
+  int16_t  *Vad         /* (o)   : frame type                           */
 )
 {
-  Word16  *Az;                  /* Pointer on A_t   */
-  Word16  lsp_new[M];           /* LSPs             */
-  Word16  code[L_SUBFR];        /* ACELP codevector */
+  int16_t  *Az;                  /* Pointer on A_t   */
+  int16_t  lsp_new[M];           /* LSPs             */
+  int16_t  code[L_SUBFR];        /* ACELP codevector */
 
   /* Scalars */
 
-  Word16  i, j, i_subfr;
-  Word16  T0, T0_frac, index;
-  Word16  bfi;
-  Word32  L_temp;
+  int16_t  i, j, i_subfr;
+  int16_t  T0, T0_frac, index;
+  int16_t  bfi;
+  int32_t  L_temp;
 
-  Word16 bad_pitch;             /* bad pitch indicator */
-  extern Word16 bad_lsf;        /* bad LSF indicator   */
+  int16_t bad_pitch;             /* bad pitch indicator */
+  extern int16_t bad_lsf;        /* bad LSF indicator   */
 
   /* for G.729B */
-  Word16 ftyp;
-  Word16 lsfq_mem[MA_NP][M];
+  int16_t ftyp;
+  int16_t lsfq_mem[MA_NP][M];
 
   /* Test bad frame indicator (bfi) */
 
@@ -281,8 +281,8 @@ void Decod_ld8a(
         if(bfi != 0)            /* Bad frame */
           {
 
-            parm[0] = Random(&seed_fer) & (Word16)0x1fff; /* 13 bits random */
-            parm[1] = Random(&seed_fer) & (Word16)0x000f; /*  4 bits random */
+            parm[0] = Random(&seed_fer) & (int16_t)0x1fff; /* 13 bits random */
+            parm[1] = Random(&seed_fer) & (int16_t)0x000f; /*  4 bits random */
           }
 
         Decod_ACELP(parm[1], parm[0], code);

@@ -17,21 +17,21 @@
 #include "tab_dtx.h"
 
 /* local function */
-static Word16 MakeDec(
-               Word16 dSLE,    /* (i)  : differential low band energy */
-               Word16 dSE,     /* (i)  : differential full band energy */
-               Word16 SD,      /* (i)  : differential spectral distortion */
-               Word16 dSZC     /* (i)  : differential zero crossing rate */
+static int16_t MakeDec(
+               int16_t dSLE,    /* (i)  : differential low band energy */
+               int16_t dSE,     /* (i)  : differential full band energy */
+               int16_t SD,      /* (i)  : differential spectral distortion */
+               int16_t dSZC     /* (i)  : differential zero crossing rate */
 );
 
 /* static variables */
-static Word16 MeanLSF[M];
-static Word16 Min_buffer[16];
-static Word16 Prev_Min, Next_Min, Min;
-static Word16 MeanE, MeanSE, MeanSLE, MeanSZC;
-static Word16 prev_energy;
-static Word16 count_sil, count_update, count_ext;
-static Word16 flag, v_flag, less_count;
+static int16_t MeanLSF[M];
+static int16_t Min_buffer[16];
+static int16_t Prev_Min, Next_Min, Min;
+static int16_t MeanE, MeanSE, MeanSLE, MeanSZC;
+static int16_t prev_energy;
+static int16_t count_sil, count_update, count_ext;
+static int16_t flag, v_flag, less_count;
 
 /*---------------------------------------------------------------------------*
  * Function  vad_init                                                        *
@@ -79,22 +79,22 @@ void vad_init(void)
  *                                                                 *
  *-----------------------------------------------------------------*/
 void vad(
-         Word16 rc,
-         Word16 *lsf, 
-         Word16 *r_h,
-         Word16 *r_l, 
-         Word16 exp_R0,
-         Word16 *sigpp,
-         Word16 frm_count,
-         Word16 prev_marker,
-         Word16 pprev_marker,
-         Word16 *marker)
+         int16_t rc,
+         int16_t *lsf, 
+         int16_t *r_h,
+         int16_t *r_l, 
+         int16_t exp_R0,
+         int16_t *sigpp,
+         int16_t frm_count,
+         int16_t prev_marker,
+         int16_t pprev_marker,
+         int16_t *marker)
 {
  /* scalar */
-  Word32 acc0;
-  Word16 i, j, exp, frac;
-  Word16 ENERGY, ENERGY_low, SD, ZC, dSE, dSLE, dSZC;
-  Word16 COEF, C_COEF, COEFZC, C_COEFZC, COEFSD, C_COEFSD;
+  int32_t acc0;
+  int16_t i, j, exp, frac;
+  int16_t ENERGY, ENERGY_low, SD, ZC, dSE, dSLE, dSZC;
+  int16_t COEF, C_COEF, COEFZC, C_COEFZC, COEFSD, C_COEFSD;
 
   /* compute the frame energy */
   acc0 = L_Comp(r_h[0], r_l[0]);
@@ -363,14 +363,14 @@ void vad(
 }
 
 /* local function */  
-static Word16 MakeDec(
-               Word16 dSLE,    /* (i)  : differential low band energy */
-               Word16 dSE,     /* (i)  : differential full band energy */
-               Word16 SD,      /* (i)  : differential spectral distortion */
-               Word16 dSZC     /* (i)  : differential zero crossing rate */
+static int16_t MakeDec(
+               int16_t dSLE,    /* (i)  : differential low band energy */
+               int16_t dSE,     /* (i)  : differential full band energy */
+               int16_t SD,      /* (i)  : differential spectral distortion */
+               int16_t dSZC     /* (i)  : differential zero crossing rate */
                )
 {
-  Word32 acc0;
+  int32_t acc0;
   
   /* SD vs dSZC */
   acc0 = L_mult(dSZC, -14680);          /* Q15*Q23*2 = Q39 */  

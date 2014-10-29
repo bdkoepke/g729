@@ -19,8 +19,8 @@
 
 
 /* Local functions */
-static Word16 Gauss(Word16 *seed);
-static Word16 Sqrt( Word32 Num);
+static int16_t Gauss(int16_t *seed);
+static int16_t Sqrt( int32_t Num);
 
 /*-----------------------------------------------------------*
  * procedure Calc_exc_rand                                   *
@@ -29,24 +29,24 @@ static Word16 Sqrt( Word32 Num);
  *   for SID and not-transmitted frames                      *
  *-----------------------------------------------------------*/
 void Calc_exc_rand(
-  Word16 cur_gain,      /* (i)   :   target sample gain                 */
-  Word16 *exc,          /* (i/o) :   excitation array                   */
-  Word16 *seed,         /* (i)   :   current Vad decision               */
-  Flag flag_cod         /* (i)   :   encoder/decoder flag               */
+  int16_t cur_gain,      /* (i)   :   target sample gain                 */
+  int16_t *exc,          /* (i/o) :   excitation array                   */
+  int16_t *seed,         /* (i)   :   current Vad decision               */
+  int32_t flag_cod         /* (i)   :   encoder/decoder flag               */
 )
 {
-  Word16 i, j, i_subfr;
-  Word16 temp1, temp2;
-  Word16 pos[4];
-  Word16 sign[4];
-  Word16 t0, frac;
-  Word16 *cur_exc;
-  Word16 g, Gp, Gp2;
-  Word16 excg[L_SUBFR], excs[L_SUBFR];
-  Word32 L_acc, L_ener, L_k;
-  Word16 max, hi, lo, inter_exc;
-  Word16 sh;
-  Word16 x1, x2;
+  int16_t i, j, i_subfr;
+  int16_t temp1, temp2;
+  int16_t pos[4];
+  int16_t sign[4];
+  int16_t t0, frac;
+  int16_t *cur_exc;
+  int16_t g, Gp, Gp2;
+  int16_t excg[L_SUBFR], excs[L_SUBFR];
+  int32_t L_acc, L_ener, L_k;
+  int16_t max, hi, lo, inter_exc;
+  int16_t sh;
+  int16_t x1, x2;
   
   if(cur_gain == 0) {
 
@@ -73,36 +73,36 @@ void Calc_exc_rand(
     /* generate random adaptive codebook & fixed codebook parameters */
     /*****************************************************************/
     temp1 = Random(seed);
-    frac = sub((temp1 & (Word16)0x0003), 1);
+    frac = sub((temp1 & (int16_t)0x0003), 1);
     if(sub(frac, 2) == 0) frac = 0;
     temp1 = shr(temp1, 2);
-    t0 = add((temp1 & (Word16)0x003F), 40);
+    t0 = add((temp1 & (int16_t)0x003F), 40);
     temp1 = shr(temp1, 6);
-    temp2 = temp1 & (Word16)0x0007;
+    temp2 = temp1 & (int16_t)0x0007;
     pos[0] = add(shl(temp2, 2), temp2); /* 5 * temp2 */
     temp1 = shr(temp1, 3);
-    sign[0] = temp1 & (Word16)0x0001;
+    sign[0] = temp1 & (int16_t)0x0001;
     temp1 = shr(temp1, 1);
-    temp2 = temp1 & (Word16)0x0007;
+    temp2 = temp1 & (int16_t)0x0007;
     temp2 = add(shl(temp2, 2), temp2);
     pos[1] = add(temp2, 1);     /* 5 * x + 1 */
     temp1 = shr(temp1, 3);
-    sign[1] = temp1 & (Word16)0x0001;
+    sign[1] = temp1 & (int16_t)0x0001;
     temp1 = Random(seed);
-    temp2 = temp1 & (Word16)0x0007;
+    temp2 = temp1 & (int16_t)0x0007;
     temp2 = add(shl(temp2, 2), temp2);
     pos[2] = add(temp2, 2);     /* 5 * x + 2 */
     temp1 = shr(temp1, 3);
-    sign[2] = temp1 & (Word16)0x0001;
+    sign[2] = temp1 & (int16_t)0x0001;
     temp1 = shr(temp1, 1);
-    temp2 = temp1 & (Word16)0x000F;
-    pos[3] = add((temp2 & (Word16)1), 3); /* j+3*/
-    temp2 = (shr(temp2, 1)) & (Word16)7;
+    temp2 = temp1 & (int16_t)0x000F;
+    pos[3] = add((temp2 & (int16_t)1), 3); /* j+3*/
+    temp2 = (shr(temp2, 1)) & (int16_t)7;
     temp2 = add(shl(temp2, 2), temp2); /* 5i */
     pos[3] = add(pos[3], temp2);
     temp1 = shr(temp1, 4);
-    sign[3] = temp1 & (Word16)0x0001;
-    Gp = Random(seed) & (Word16)0x1FFF; /* < 0.5 Q14 */
+    sign[3] = temp1 & (int16_t)0x0001;
+    Gp = Random(seed) & (int16_t)0x1FFF; /* < 0.5 Q14 */
     Gp2 = shl(Gp, 1);           /* Q15 */
 
 
@@ -212,7 +212,7 @@ void Calc_exc_rand(
       temp1 = abs_s(excg[(int)pos[0]]) | abs_s(excg[(int)pos[1]]);
       temp2 = abs_s(excg[(int)pos[2]]) | abs_s(excg[(int)pos[3]]);
       temp1 = temp1 | temp2;
-      sh = ((temp1 & (Word16)0x4000) == 0) ? (Word16)1 : (Word16)2;
+      sh = ((temp1 & (int16_t)0x4000) == 0) ? (int16_t)1 : (int16_t)2;
       inter_exc = 0;
       for(i=0; i<4; i++) {
         temp1 = shr(excg[(int)pos[i]], sh);
@@ -272,16 +272,16 @@ void Calc_exc_rand(
 
 /* Gaussian generation */
 /***********************/
-static Word16 Gauss(Word16 *seed)
+static int16_t Gauss(int16_t *seed)
 {
 
 /****  Xi = uniform v.a. in [-32768, 32767]       ****/
 /****  Z = SUM(i=1->12) Xi / 2 x 32768 is N(0,1)  ****/
 /****  output : Z x 512 < 2^12                    ****/
 
-  Word16 i;
-  Word16 temp;
-  Word32 L_acc;
+  int16_t i;
+  int16_t temp;
+  int32_t L_acc;
   
   L_acc = 0L;
   for(i=0; i<12; i++) {
@@ -294,20 +294,20 @@ static Word16 Gauss(Word16 *seed)
 
 /* Square root function : returns sqrt(Num/2) */
 /**********************************************/
-static Word16   Sqrt( Word32 Num )
+static int16_t   Sqrt( int32_t Num )
 {
-  Word16   i  ;
+  int16_t   i  ;
   
-  Word16   Rez = (Word16) 0 ;
-  Word16   Exp = (Word16) 0x4000 ;
+  int16_t   Rez = (int16_t) 0 ;
+  int16_t   Exp = (int16_t) 0x4000 ;
   
-  Word32   Acc, L_temp;
+  int32_t   Acc, L_temp;
   
   for ( i = 0 ; i < 14 ; i ++ ) {
     Acc = L_mult(add(Rez, Exp), add(Rez, Exp) );
     L_temp = L_sub(Num, Acc);
     if(L_temp >= 0L) Rez = add( Rez, Exp);
-    Exp = shr( Exp, (Word16) 1 ) ;
+    Exp = shr( Exp, (int16_t) 1 ) ;
   }
   return Rez ;
 }

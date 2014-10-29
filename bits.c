@@ -22,8 +22,8 @@
 #include "octet.h"
 
 /* prototypes for local functions */
-static void  int2bin(Word16 value, Word16 no_of_bits, Word16 *bitstream);
-static Word16   bin2int(Word16 no_of_bits, Word16 *bitstream);
+static void  int2bin(int16_t value, int16_t no_of_bits, int16_t *bitstream);
+static int16_t   bin2int(int16_t no_of_bits, int16_t *bitstream);
 
 /*----------------------------------------------------------------------------
  * prm2bits_ld8k -converts encoder parameter vector into vector of serial bits
@@ -49,12 +49,12 @@ static Word16   bin2int(Word16 no_of_bits, Word16 *bitstream);
  *----------------------------------------------------------------------------
  */
 void prm2bits_ld8k(
- Word16   prm[],           /* input : encoded parameters  (PRM_SIZE parameters)  */
-  Word16 bits[]           /* output: serial bits (SERIAL_SIZE ) bits[0] = bfi
+ int16_t   prm[],           /* input : encoded parameters  (PRM_SIZE parameters)  */
+  int16_t bits[]           /* output: serial bits (SERIAL_SIZE ) bits[0] = bfi
                                     bits[1] = 80 */
 )
 {
-  Word16 i;
+  int16_t i;
   *bits++ = SYNC_WORD;     /* bit[0], at receiver this bits indicates BFI */
 
   switch(prm[0]){
@@ -109,19 +109,19 @@ void prm2bits_ld8k(
  *----------------------------------------------------------------------------
  */
 static void int2bin(
- Word16 value,             /* input : decimal value */
- Word16 no_of_bits,        /* input : number of bits to use */
- Word16 *bitstream       /* output: bitstream  */
+ int16_t value,             /* input : decimal value */
+ int16_t no_of_bits,        /* input : number of bits to use */
+ int16_t *bitstream       /* output: bitstream  */
 )
 {
-   Word16 *pt_bitstream;
-   Word16   i, bit;
+   int16_t *pt_bitstream;
+   int16_t   i, bit;
 
    pt_bitstream = bitstream + no_of_bits;
 
    for (i = 0; i < no_of_bits; i++)
    {
-     bit = value & (Word16)0x0001;      /* get lsb */
+     bit = value & (int16_t)0x0001;      /* get lsb */
      if (bit == 0)
          *--pt_bitstream = BIT_0;
      else
@@ -135,12 +135,12 @@ static void int2bin(
  *----------------------------------------------------------------------------
  */
 void bits2prm_ld8k(
- Word16 bits[],          /* input : serial bits (80)                       */
- Word16   prm[]          /* output: decoded parameters (11 parameters)     */
+ int16_t bits[],          /* input : serial bits (80)                       */
+ int16_t   prm[]          /* output: decoded parameters (11 parameters)     */
 )
 {
-  Word16 i;
-  Word16 nb_bits;
+  int16_t i;
+  int16_t nb_bits;
 
   nb_bits = *bits++;        /* Number of bits in this frame       */
 
@@ -182,13 +182,13 @@ void bits2prm_ld8k(
  * bin2int - read specified bits from bit array  and convert to integer value
  *----------------------------------------------------------------------------
  */
-static Word16 bin2int(            /* output: decimal value of bit pattern */
- Word16 no_of_bits,        /* input : number of bits to read */
- Word16 *bitstream       /* input : array containing bits */
+static int16_t bin2int(            /* output: decimal value of bit pattern */
+ int16_t no_of_bits,        /* input : number of bits to read */
+ int16_t *bitstream       /* input : array containing bits */
 )
 {
-   Word16   value, i;
-   Word16 bit;
+   int16_t   value, i;
+   int16_t bit;
 
    value = 0;
    for (i = 0; i < no_of_bits; i++)
@@ -200,16 +200,16 @@ static Word16 bin2int(            /* output: decimal value of bit pattern */
    return(value);
 }
 
-Word16 read_frame(FILE *f_serial, Word16 *parm)
+int16_t read_frame(FILE *f_serial, int16_t *parm)
 {
-  Word16  i;
-  Word16  serial[SERIAL_SIZE];          /* Serial stream               */
+  int16_t  i;
+  int16_t  serial[SERIAL_SIZE];          /* Serial stream               */
 
   if(fread(serial, sizeof(short), 2, f_serial) != 2) {
     return(0);
   }
 
-  if(fread(&serial[2], sizeof(Word16), (size_t)serial[1], f_serial)
+  if(fread(&serial[2], sizeof(int16_t), (size_t)serial[1], f_serial)
      != (size_t)serial[1]) {
     return(0);
   }

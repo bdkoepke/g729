@@ -42,14 +42,14 @@
 
         /* inverse filtered synthesis (with A(z/GAMMA2_PST))   */
 
-static Word16 res2_buf[PIT_MAX+L_SUBFR];
-static Word16 *res2;
-static Word16 scal_res2_buf[PIT_MAX+L_SUBFR];
-static Word16 *scal_res2;
+static int16_t res2_buf[PIT_MAX+L_SUBFR];
+static int16_t *res2;
+static int16_t scal_res2_buf[PIT_MAX+L_SUBFR];
+static int16_t *scal_res2;
 
         /* memory of filter 1/A(z/GAMMA1_PST) */
 
-static Word16 mem_syn_pst[M];
+static int16_t mem_syn_pst[M];
 
 /*---------------------------------------------------------------*
  * Procedure    Init_Post_Filter:                                *
@@ -85,31 +85,31 @@ void Init_Post_Filter(void)
  *------------------------------------------------------------------------*/
 
 void Post_Filter(
-  Word16 *syn,       /* in/out: synthesis speech (postfiltered is output)    */
-  Word16 *Az_4,      /* input : interpolated LPC parameters in all subframes */
-  Word16 *T,          /* input : decoded pitch lags in all subframes          */
-  Word16 Vad
+  int16_t *syn,       /* in/out: synthesis speech (postfiltered is output)    */
+  int16_t *Az_4,      /* input : interpolated LPC parameters in all subframes */
+  int16_t *T,          /* input : decoded pitch lags in all subframes          */
+  int16_t Vad
 )
 {
  /*-------------------------------------------------------------------*
   *           Declaration of parameters                               *
   *-------------------------------------------------------------------*/
 
- Word16 res2_pst[L_SUBFR];  /* res2[] after pitch postfiltering */
- Word16 syn_pst[L_FRAME];   /* post filtered synthesis speech   */
+ int16_t res2_pst[L_SUBFR];  /* res2[] after pitch postfiltering */
+ int16_t syn_pst[L_FRAME];   /* post filtered synthesis speech   */
 
- Word16 Ap3[MP1], Ap4[MP1];  /* bandwidth expanded LP parameters */
+ int16_t Ap3[MP1], Ap4[MP1];  /* bandwidth expanded LP parameters */
 
- Word16 *Az;                 /* pointer to Az_4:                 */
+ int16_t *Az;                 /* pointer to Az_4:                 */
                              /*  LPC parameters in each subframe */
- Word16   t0_max, t0_min;    /* closed-loop pitch search range   */
- Word16   i_subfr;           /* index for beginning of subframe  */
+ int16_t   t0_max, t0_min;    /* closed-loop pitch search range   */
+ int16_t   i_subfr;           /* index for beginning of subframe  */
 
- Word16 h[L_H];
+ int16_t h[L_H];
 
- Word16  i, j;
- Word16  temp1, temp2;
- Word32  L_tmp;
+ int16_t  i, j;
+ int16_t  temp1, temp2;
+ int32_t  L_tmp;
 
    /*-----------------------------------------------------*
     * Post filtering                                      *
@@ -216,19 +216,19 @@ void Post_Filter(
  *--------------------------------------------------------------------------*/
 
 void pit_pst_filt(
-  Word16 *signal,      /* (i)     : input signal                        */
-  Word16 *scal_sig,    /* (i)     : input signal (scaled, divided by 4) */
-  Word16 t0_min,       /* (i)     : minimum value in the searched range */
-  Word16 t0_max,       /* (i)     : maximum value in the searched range */
-  Word16 L_subfr,      /* (i)     : size of filtering                   */
-  Word16 *signal_pst   /* (o)     : harmonically postfiltered signal    */
+  int16_t *signal,      /* (i)     : input signal                        */
+  int16_t *scal_sig,    /* (i)     : input signal (scaled, divided by 4) */
+  int16_t t0_min,       /* (i)     : minimum value in the searched range */
+  int16_t t0_max,       /* (i)     : maximum value in the searched range */
+  int16_t L_subfr,      /* (i)     : size of filtering                   */
+  int16_t *signal_pst   /* (o)     : harmonically postfiltered signal    */
 )
 {
-  Word16 i, j, t0;
-  Word16 g0, gain, cmax, en, en0;
-  Word16 *p, *p1, *deb_sig;
-  Word32 corr, cor_max, ener, ener0, temp;
-  Word32 L_temp;
+  int16_t i, j, t0;
+  int16_t g0, gain, cmax, en, en0;
+  int16_t *p, *p1, *deb_sig;
+  int32_t corr, cor_max, ener, ener0, temp;
+  int32_t L_temp;
 
 /*---------------------------------------------------------------------------*
  * Compute the correlations for all delays                                   *
@@ -247,7 +247,7 @@ void pit_pst_filt(
        corr = L_mac(corr, *p++, *p1++);
 
     L_temp = L_sub(corr, cor_max);
-    if (L_temp > (Word32)0)
+    if (L_temp > (int32_t)0)
     {
       cor_max = corr;
       t0 = i;
@@ -296,7 +296,7 @@ void pit_pst_filt(
   temp = L_mult(cmax, cmax);
   temp = L_sub(temp, L_shr(L_mult(en, en0), 1));
 
-  if (temp < (Word32)0)           /* if prediction gain < 3 dB   */
+  if (temp < (int32_t)0)           /* if prediction gain < 3 dB   */
   {                               /* switch off pitch postfilter */
     for (i = 0; i < L_subfr; i++)
       signal_pst[i] = signal[i];
@@ -343,13 +343,13 @@ void pit_pst_filt(
  *---------------------------------------------------------------------*/
 
 void preemphasis(
-  Word16 *signal,  /* (i/o)   : input signal overwritten by the output */
-  Word16 g,        /* (i) Q15 : preemphasis coefficient                */
-  Word16 L         /* (i)     : size of filtering                      */
+  int16_t *signal,  /* (i/o)   : input signal overwritten by the output */
+  int16_t g,        /* (i) Q15 : preemphasis coefficient                */
+  int16_t L         /* (i)     : size of filtering                      */
 )
 {
-  static Word16 mem_pre = 0;
-  Word16 *p1, *p2, temp, i;
+  static int16_t mem_pre = 0;
+  int16_t *p1, *p2, temp, i;
 
   p1 = signal + L - 1;
   p2 = p1 - 1;
@@ -376,17 +376,17 @@ void preemphasis(
  *----------------------------------------------------------------------*/
 
 void agc(
-  Word16 *sig_in,   /* (i)     : postfilter input signal  */
-  Word16 *sig_out,  /* (i/o)   : postfilter output signal */
-  Word16 l_trm      /* (i)     : subframe size            */
+  int16_t *sig_in,   /* (i)     : postfilter input signal  */
+  int16_t *sig_out,  /* (i/o)   : postfilter output signal */
+  int16_t l_trm      /* (i)     : subframe size            */
 )
 {
-  static Word16 past_gain=4096;         /* past_gain = 1.0 (Q12) */
-  Word16 i, exp;
-  Word16 gain_in, gain_out, g0, gain;                     /* Q12 */
-  Word32 s;
+  static int16_t past_gain=4096;         /* past_gain = 1.0 (Q12) */
+  int16_t i, exp;
+  int16_t gain_in, gain_out, g0, gain;                     /* Q12 */
+  int32_t s;
 
-  Word16 signal[L_SUBFR];
+  int16_t signal[L_SUBFR];
 
   /* calculate gain_out with exponent */
 

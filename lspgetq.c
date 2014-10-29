@@ -14,19 +14,19 @@
 
 
 void Lsp_get_quant(
-  Word16 lspcb1[][M],      /* (i) Q13 : first stage LSP codebook      */
-  Word16 lspcb2[][M],      /* (i) Q13 : Second stage LSP codebook     */
-  Word16 code0,            /* (i)     : selected code of first stage  */
-  Word16 code1,            /* (i)     : selected code of second stage */
-  Word16 code2,            /* (i)     : selected code of second stage */
-  Word16 fg[][M],          /* (i) Q15 : MA prediction coef.           */
-  Word16 freq_prev[][M],   /* (i) Q13 : previous LSP vector           */
-  Word16 lspq[],           /* (o) Q13 : quantized LSP parameters      */
-  Word16 fg_sum[]          /* (i) Q15 : present MA prediction coef.   */
+  int16_t lspcb1[][M],      /* (i) Q13 : first stage LSP codebook      */
+  int16_t lspcb2[][M],      /* (i) Q13 : Second stage LSP codebook     */
+  int16_t code0,            /* (i)     : selected code of first stage  */
+  int16_t code1,            /* (i)     : selected code of second stage */
+  int16_t code2,            /* (i)     : selected code of second stage */
+  int16_t fg[][M],          /* (i) Q15 : MA prediction coef.           */
+  int16_t freq_prev[][M],   /* (i) Q13 : previous LSP vector           */
+  int16_t lspq[],           /* (o) Q13 : quantized LSP parameters      */
+  int16_t fg_sum[]          /* (i) Q15 : present MA prediction coef.   */
 )
 {
-  Word16 j;
-  Word16 buf[M];           /* Q13 */
+  int16_t j;
+  int16_t buf[M];           /* Q13 */
 
 
   for ( j = 0 ; j < NC ; j++ )
@@ -49,12 +49,12 @@ void Lsp_get_quant(
 
 
 void Lsp_expand_1(
-  Word16 buf[],        /* (i/o) Q13 : LSP vectors */
-  Word16 gap           /* (i)   Q13 : gap         */
+  int16_t buf[],        /* (i/o) Q13 : LSP vectors */
+  int16_t gap           /* (i)   Q13 : gap         */
 )
 {
-  Word16 j, tmp;
-  Word16 diff;        /* Q13 */
+  int16_t j, tmp;
+  int16_t diff;        /* Q13 */
 
   for ( j = 1 ; j < NC ; j++ ) {
     diff = sub( buf[j-1], buf[j] );
@@ -70,12 +70,12 @@ void Lsp_expand_1(
 
 
 void Lsp_expand_2(
-  Word16 buf[],       /* (i/o) Q13 : LSP vectors */
-  Word16 gap          /* (i)   Q13 : gap         */
+  int16_t buf[],       /* (i/o) Q13 : LSP vectors */
+  int16_t gap          /* (i)   Q13 : gap         */
 )
 {
-  Word16 j, tmp;
-  Word16 diff;        /* Q13 */
+  int16_t j, tmp;
+  int16_t diff;        /* Q13 */
 
   for ( j = NC ; j < M ; j++ ) {
     diff = sub( buf[j-1], buf[j] );
@@ -91,12 +91,12 @@ void Lsp_expand_2(
 
 
 void Lsp_expand_1_2(
-  Word16 buf[],       /* (i/o) Q13 : LSP vectors */
-  Word16 gap          /* (i)   Q13 : gap         */
+  int16_t buf[],       /* (i/o) Q13 : LSP vectors */
+  int16_t gap          /* (i)   Q13 : gap         */
 )
 {
-  Word16 j, tmp;
-  Word16 diff;        /* Q13 */
+  int16_t j, tmp;
+  int16_t diff;        /* Q13 */
 
   for ( j = 1 ; j < M ; j++ ) {
     diff = sub( buf[j-1], buf[j] );
@@ -120,15 +120,15 @@ void Lsp_expand_1_2(
   compose LSP parameter from elementary LSP with previous LSP.
 */
 void Lsp_prev_compose(
-  Word16 lsp_ele[],             /* (i) Q13 : LSP vectors                 */
-  Word16 lsp[],                 /* (o) Q13 : quantized LSP parameters    */
-  Word16 fg[][M],               /* (i) Q15 : MA prediction coef.         */
-  Word16 freq_prev[][M],        /* (i) Q13 : previous LSP vector         */
-  Word16 fg_sum[]               /* (i) Q15 : present MA prediction coef. */
+  int16_t lsp_ele[],             /* (i) Q13 : LSP vectors                 */
+  int16_t lsp[],                 /* (o) Q13 : quantized LSP parameters    */
+  int16_t fg[][M],               /* (i) Q15 : MA prediction coef.         */
+  int16_t freq_prev[][M],        /* (i) Q13 : previous LSP vector         */
+  int16_t fg_sum[]               /* (i) Q15 : present MA prediction coef. */
 )
 {
-  Word16 j, k;
-  Word32 L_acc;                 /* Q29 */
+  int16_t j, k;
+  int32_t L_acc;                 /* Q29 */
 
   for ( j = 0 ; j < M ; j++ ) {
     L_acc = L_mult( lsp_ele[j], fg_sum[j] );
@@ -145,16 +145,16 @@ void Lsp_prev_compose(
   extract elementary LSP from composed LSP with previous LSP
 */
 void Lsp_prev_extract(
-  Word16 lsp[M],                /* (i) Q13 : unquantized LSP parameters  */
-  Word16 lsp_ele[M],            /* (o) Q13 : target vector               */
-  Word16 fg[MA_NP][M],          /* (i) Q15 : MA prediction coef.         */
-  Word16 freq_prev[MA_NP][M],   /* (i) Q13 : previous LSP vector         */
-  Word16 fg_sum_inv[M]          /* (i) Q12 : inverse previous LSP vector */
+  int16_t lsp[M],                /* (i) Q13 : unquantized LSP parameters  */
+  int16_t lsp_ele[M],            /* (o) Q13 : target vector               */
+  int16_t fg[MA_NP][M],          /* (i) Q15 : MA prediction coef.         */
+  int16_t freq_prev[MA_NP][M],   /* (i) Q13 : previous LSP vector         */
+  int16_t fg_sum_inv[M]          /* (i) Q12 : inverse previous LSP vector */
 )
 {
-  Word16 j, k;
-  Word32 L_temp;                /* Q19 */
-  Word16 temp;                  /* Q13 */
+  int16_t j, k;
+  int32_t L_temp;                /* Q19 */
+  int16_t temp;                  /* Q13 */
 
 
   for ( j = 0 ; j < M ; j++ ) {
@@ -175,11 +175,11 @@ void Lsp_prev_extract(
   update previous LSP parameter
 */
 void Lsp_prev_update(
-  Word16 lsp_ele[M],             /* (i)   Q13 : LSP vectors           */
-  Word16 freq_prev[MA_NP][M]     /* (i/o) Q13 : previous LSP vectors  */
+  int16_t lsp_ele[M],             /* (i)   Q13 : LSP vectors           */
+  int16_t freq_prev[MA_NP][M]     /* (i/o) Q13 : previous LSP vectors  */
 )
 {
-  Word16 k;
+  int16_t k;
 
   for ( k = MA_NP-1 ; k > 0 ; k-- )
     Copy(freq_prev[k-1], freq_prev[k], M);
@@ -189,13 +189,13 @@ void Lsp_prev_update(
 }
 
 void Lsp_stability(
-  Word16 buf[]       /* (i/o) Q13 : quantized LSP parameters      */
+  int16_t buf[]       /* (i/o) Q13 : quantized LSP parameters      */
 )
 {
-  Word16 j;
-  Word16 tmp;
-  Word32 L_diff;
-  Word32 L_acc, L_accb;
+  int16_t j;
+  int16_t tmp;
+  int32_t L_diff;
+  int32_t L_acc, L_accb;
 
   for(j=0; j<M-1; j++) {
     L_acc = L_deposit_l( buf[j+1] );

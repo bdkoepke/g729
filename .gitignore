@@ -26,3 +26,5 @@ ltmain.sh
 m4/
 *.o
 *.lo
+*.la
+.libs

@@ -136,7 +136,7 @@ void Decod_ld8a(
   int32_t  L_temp;
 
   int16_t bad_pitch;             /* bad pitch indicator */
-  extern int16_t bad_lsf;        /* bad LSF indicator   */
+  int16_t bad_lsf = 0;        /* bad LSF indicator   */
 
   /* for G.729B */
   int16_t ftyp;
